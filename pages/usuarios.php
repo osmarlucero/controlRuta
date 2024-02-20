@@ -70,7 +70,7 @@
                 <p class="">Usuarios Existentes</p><a href="createUser.php">Crear Usuario</a>
                 <ul class="ulMain item-list">
                     <?php foreach ($users as $user): ?>
-                    <li><?= $user['id'] ?> | <?= $user['nombre'] ?> | <?= $user['apellido'] ?>
+                    <li><?= $user['id'] ?> | <?= $user['nombre'] ?>  <?= $user['apellido'] ?> Rol:<?= $user['rol'] ?>
                     <a href="editUser.php?id=<?= $user['id'] ?>">Editar</a>                       
                     </li>        
                     <?php endforeach ?>

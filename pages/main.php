@@ -41,7 +41,7 @@
 
             <!-- Formulario 2: Tiendas -->
             <div class="mainContainer">
-                 <a href=""><ul class="ulMain">
+                 <a href="stores.php"><ul class="ulMain">
                     <li><img src="../images/store.png" alt="Tienda"></li>
                     <li>Tiendas</li>
                     <!-- Agrega más elementos del formulario según sea necesario -->

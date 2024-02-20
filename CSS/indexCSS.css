@@ -1,0 +1,105 @@
+Body{
+	Padding:0;
+	Margin:0;
+	/*background-color: #d7d7d7;
+	background-size: 100%;*/
+	background-color: #d7d7d7;
+	--background-image: url(../Imagenes/yosi.png);
+	background-repeat: no-repeat;
+	background-size: 100% 140%;
+}
+#main{
+	background-color: #e5e5e5;
+    width: 50%;
+    border: 1px solid black;
+    margin: auto;
+    margin-top: 0%;
+    border-radius:0.3rem;
+    padding-bottom: 2%;
+}
+#list_container{
+	width: 80%;
+    margin: auto;
+    padding-top: 2%;
+}
+#list_container ul{
+	list-style: none;width: 100%;
+}
+#list_container ul li{
+	padding-top: 5%;
+}
+#list_container input{
+	width: 90%;
+	height: 3.6rem;
+	border-radius: 0.2rem;
+	outline: 0;
+	border:1px solid #afaaaa;
+}
+.font_style{
+	font-family: Montserrat-Regular,sans-serif;
+    font-size: 1.01rem;
+    color: #ffa903;
+}
+.font_title{
+	font-family: Montserrat-Regular,sans-serif;
+    color: #ffa903;
+}
+.style_login::placeholder { 
+    color: #ffa903;
+}
+.style_login{
+    padding-left: 5%;
+    box-sizing: border-box;
+    background-color: #0e3fa9;
+}
+#button_container{
+	width: 76%;
+    margin-left: 8%;
+    padding-left: 3%;
+    padding-top: 3%;
+}
+.title{
+	text-align: center;
+	padding-top: 3%;
+}
+.button_style{
+	padding: 0.7rem 0.4rem;
+    --margin-left: 40%;
+    outline: none;
+    border: 1px solid #afaaaa;
+    border-radius: 5%;
+    text-decoration: none;
+}
+#container_register{
+	width: 80%;
+    margin: auto;
+    padding-bottom: : 2%;
+    display: none;
+}
+#container_register ul{
+	list-style: none;width: 100%;
+}
+#container_register ul li{
+	padding-top: 5%;
+}
+#container_register input{
+	width: 90%;
+	height: 3.6rem;
+	border-radius: 0.2rem;
+	outline: 0;
+	border:1px solid #afaaaa;
+}
+#image_logo{
+	width: 100%;
+}
+#logo_location{
+	width: 15%;
+    margin-left: 4%;
+    margin-top: 2%;
+    padding: 3%;
+}
+#logo_inner{
+	width: 100%;
+	margin-left: 10%;
+
+}

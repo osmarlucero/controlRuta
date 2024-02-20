@@ -1,0 +1,40 @@
+ body {
+            padding: 0;
+            margin: 0;
+            background-color: #d7d7d7;
+            background-image: url(../Imagenes/yosi.png); /* Si tienes una imagen de fondo específica */
+            background-repeat: no-repeat;
+            background-size: cover; /* Ajustar el tamaño de la imagen de fondo */
+        }
+
+        .mainContainer {
+            background-color: #3498db; /* Azul */
+            max-width: 20%; /* Reducción del 20% */
+            margin: 20px auto; /* Centrar en la página y reducir margen superior */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+
+        .ulMain {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .ulMain li {
+            background-color: #ecf0f1; /* Gris claro */
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .ulMain li img {
+            max-width: 60%;
+            border-radius: 50%;
+            margin: 0 auto; /* Alinear al centro */
+            display: block; /* Evitar espacio adicional debajo de la imagen */
+        }

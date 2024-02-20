@@ -1,0 +1,77 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #d7d7d7;
+    background-image: url(../Imagenes/yosi.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mainContainer {
+    background-color: #3498db;
+    min-width: 60%;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ulMain {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.ulMain li {
+    background-color: #ecf0f1;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column; /* Cambiado a columna para que los elementos se muestren uno encima del otro */
+    align-items: center;
+}
+
+.mdm {
+    display: flex;
+    /*flex-direction: column; Cambiado a columna para que los elementos se muestren uno encima del otro */
+    margin: 10px auto; /* Aumenté el margen entre cada par de campos */
+}
+
+/* Estilo para las etiquetas <label> */
+.mdm label {
+    margin-right: 10px; /* Espacio entre la etiqueta y el campo de entrada */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    background-color: red;
+}
+
+.pagination li {
+    background-color: #3498db;
+    color: #fff;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    list-style: none;
+}
+/* Estilo para el botón */
+.center-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.center-button button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

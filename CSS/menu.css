@@ -1,0 +1,9 @@
+.fu ul li{
+	background-color: red;	
+	display: inline-flex;
+}
+.fu:hover>ul l-i{ 
+	background-color: red;	
+	display:block;
+	position: fixed;
+}

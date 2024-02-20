@@ -1,0 +1,39 @@
+#main_menu{
+    width: 100%;
+    background-color: #b20d01b0;
+    padding: 0.5%;
+}
+#data a{
+    margin-left: 4%;
+    font-family: Montserrat-Regular,sans-serif;
+    text-decoration: none;
+    color:#ffa903;
+    border-bottom: 4px solid #ffffff00;
+}
+#data a:hover{
+    color:black;
+    transition: 0.7s;
+     border-bottom:  4px solid black;
+}
+#data ul li{
+    display: inline-flex;
+    list-style: none;
+    width: 11%;
+}
+#data ul li:hover > ul {
+    transition: 0.7s;
+    display: inline-grid;
+    --margin: 10% 10% -162% -121%;
+}
+#data ul li a{
+    width:0%;
+}
+#data ul li ul {
+    display:none;
+    transition: 0.7s;
+    margin: 29% 0% -158% -8%; 
+}
+#data ul li ul li{
+   width:0%;
+   padding-right: 1%; 
+}

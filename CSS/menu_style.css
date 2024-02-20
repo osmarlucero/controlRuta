@@ -1,0 +1,44 @@
+Body{
+	Padding:0;
+	Margin:0;
+}
+#header_image{
+	width:22%;	
+}
+#header{
+	display: inline-flex;
+	width: 100%;
+	position: fixed;
+	background-color: #0f133ed4;
+}
+#image_header{
+	width: 32%;
+    margin-top: 4.5%;
+    margin-left: 45%;
+}
+#header_menu{
+	width: 50%;
+	margin-left: 5%;
+	padding-bottom: 1%;
+}
+#header_menu ul{
+	margin-top: 5%;
+	list-style: none;
+	display: inline-flex;
+	width: 100%;
+}
+#header_menu ul li{
+	margin-left: 4%;	
+}
+#header_menu ul li a{
+	text-decoration: none;
+}
+.font_style{
+	 color:#ffa903;
+}
+#logout{
+    outline: none;
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: none;
+}

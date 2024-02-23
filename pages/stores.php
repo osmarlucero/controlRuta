@@ -24,17 +24,7 @@
             $("#header").load("menu.php"); 
         });
     </script> 
-    <script>
-  function loadGoogleMaps() {
-    var script = document.createElement('script');
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap';
-    script.defer = true;
-    document.body.appendChild(script);
-  }
-
-  // Llama a la función para cargar Google Maps después de que la página se haya cargado
-  window.onload = loadGoogleMaps;
-</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap" async defer></script>
     <script>
         // Inicializa el mapa con una ubicación específica
         function initMap() {
@@ -62,7 +52,7 @@
     <!-- Formulario 1: Usuarios -->
     <main class="container d-flex align-items-center justify-content-center">
         <div class="mainContainer">
-            <p class="">Tiendas Existentes</p>
+            <p class="">Tiendas Existentes <a href="crearTienda.php">Nueva + </a></p>
             <ul class="ulMain item-list">
                 <li> 
                     <div id="map" style="height: 400px;"></div>

@@ -1,0 +1,71 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #d7d7d7;
+    background-image: url(../Imagenes/yosi.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mainContainer {
+    background-color: #3498db;
+    min-width: 60%;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ulMain {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.ulMain li {
+    background-color: #ecf0f1;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column; /* Cambiado a columna para que los elementos se muestren uno encima del otro */
+    align-items: center;
+}
+
+ #map {
+    height: 400px;
+    width: 100%;
+}
+ /* Estilos para la tabla */
+        .default {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Estilos para las celdas del encabezado */
+        .default th {
+            background-color: #f2f2f2;
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 10px;
+        }
+
+        /* Estilos para las celdas de datos */
+        .default td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 10px;
+        }
+
+        /* Estilos para las filas impares */
+        .default tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        /* Estilos para las filas al pasar el ratón */
+        .default tr:hover {
+            background-color: #e5e5e5;
+        }

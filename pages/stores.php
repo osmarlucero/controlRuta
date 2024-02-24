@@ -1,8 +1,7 @@
 <?php
     include "../app/categoryController.php";
     $categoryController = new categoryController();
-    //  $users = $categoryController->getUsers();
-   
+    $users = $categoryController->getLocations();
     /*if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }*/
@@ -25,26 +24,54 @@
         });
     </script> 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap" async defer></script>
-    <script>
-        // Inicializa el mapa con una ubicación específica
-        function initMap() {
-            // Coordenadas de ejemplo (puedes cambiarlas por las que desees)
-            var myLatLng = { lat: 37.7749, lng: -122.4194 };
-
-            // Crea un nuevo mapa y centra en las coordenadas especificadas
+     <script>
+       
+    function initMap() {
+        // Array de ubicaciones de ejemplo
+        //getStores();
+        //console.log(stores);
+        var locations=<?php echo json_encode($users); ?> ;
+        parseFloat(locations[0].lat);
+        for (var i=0; i<locations.length;i++) {
+            locations[i].lat=parseFloat(locations[i].lat);
+            locations[i].lng=parseFloat(locations[i].lng);
+        }
+        // Crea un nuevo mapa y centra en la primera ubicación si hay al menos una ubicación
+        if (locations.length > 0) {
             var map = new google.maps.Map(document.getElementById('map'), {
-                center: myLatLng,
-                zoom: 12 // Ajusta el nivel de zoom según tus necesidades
+                center: locations[0],
+                zoom: 12
             });
 
-            // Crea un marcador en la ubicación especificada
+            // Agrega marcadores e infoWindows para cada ubicación en el array
+            for (var i = 0; i < locations.length; i++) {
+                addMarker(locations[i], map,locations[i].id_tienda);
+            }
+        }
+
+        function addMarker(location, map,id) {
             var marker = new google.maps.Marker({
-                position: myLatLng,
+                position: location,
                 map: map,
-                title: 'Ubicación de ejemplo'
+                title: 'Ubicación ' + (i + 1)
+            });
+
+            // Crea un enlace dentro del cuadro de diálogo
+            var link = '<a href="storeInfo.php?id=' + id + '">Informacion de tienda</a>';
+
+            var infoWindow = new google.maps.InfoWindow({
+                content: location.nombre + '<br>' + link
+            });
+
+            marker.addListener('click', function () {
+                infoWindow.open(map, marker);
             });
         }
-    </script>
+    }
+</script>
+
+
+
 </head>
 
 <body>
@@ -52,10 +79,10 @@
     <!-- Formulario 1: Usuarios -->
     <main class="container d-flex align-items-center justify-content-center">
         <div class="mainContainer">
-            <p class="">Tiendas Existentes <a href="crearTienda.php">Nueva + </a></p>
+            <p class="">Tiendas Existentes</p>
             <ul class="ulMain item-list">
                 <li> 
-                    <div id="map" style="height: 400px;"></div>
+                    <div id="map" style="width: 500px; height: 400px;"></div>
                 </li>        
                 <!-- Agrega más elementos del formulario según sea necesario -->
             </ul>

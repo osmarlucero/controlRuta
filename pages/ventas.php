@@ -19,13 +19,46 @@
         <meta http-equiv="Last-Modified" content="0">
         <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
         <meta http-equiv="Pragma" content="no-cache">
-        <title>Inventarios</title>
+        <title>Ventas</title>
        <script src="../app/jquery-3.5.1.min.js"></script>
         <script>
             $(function(){
               $("#header").load("menu.php"); 
             });
         </script> 
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            const itemsPerPage = 5;
+            const itemList = document.querySelector('.item-list');
+            const paginationContainer = document.getElementById('pagination');
+
+            const totalItems = itemList.children.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            // Generar botones de paginación
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('li');
+                pageButton.textContent = i;
+                pageButton.addEventListener('click', function () {
+                    showPage(i);
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+
+            // Función para mostrar la página seleccionada
+            function showPage(pageNumber) {
+                const startIndex = (pageNumber - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                for (let i = 0; i < totalItems; i++) {
+                    itemList.children[i].style.display = (i >= startIndex && i < endIndex) ? 'block' : 'none';
+                }
+            }
+
+            // Mostrar la primera página al cargar la página
+            showPage(1);
+            });
+        </script>
     </head>
     
 
@@ -35,7 +68,7 @@
         <!-- Formulario 1: Usuarios -->
         <main class="container d-flex align-items-center justify-content-center">
             <div class="mainContainer">
-                <p class="">Insumos Existentes</p>
+                <p class="">Ventas Realizadas</p>
                 <ul class="ulMain item-list">
                    <table class="default">
                         <tr>
@@ -48,7 +81,7 @@
                         </tr>
                         <?php foreach ($insumos as $insumo): ?>
                         <tr>
-                            <td><?= $insumo['fecha_venta'] ?></td>
+                            <td><a href="detalleVenta.php?id=<?= $insumo['venta_id'] ?>"class="btn btn-success"><?= $insumo['venta_id'] ?></a></td>
                             <td><?= $insumo['fecha_venta'] ?></td>
                             <td><?= $insumo['tipo_venta'] ?></td>
                             <td><?= $insumo['cantidad_piezas'] ?></td>
@@ -62,7 +95,7 @@
                 </ul>
             </div>
         </main>
-       
+       <div id="pagination" class="pagination"></div>
         
     </body>
 </html>

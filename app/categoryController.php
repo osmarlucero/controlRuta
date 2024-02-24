@@ -13,6 +13,9 @@
 				$rol = strip_tags($_POST['rol']);
 				$CategoryController->storeUser($id, $nombre, $apellido,$rol);
 			break;
+			case 'getLocation':
+				$CategoryController->getLocations();
+			break;
 			case 'storeStore':
 				$nombre = strip_tags($_POST['nombreTienda']);
 				$direccion = strip_tags($_POST['direccion']);
@@ -186,6 +189,66 @@
 					$users = $results->fetch_all(MYSQLI_ASSOC);
 					if( count($users)>0){
 						return $users;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		public function getDEtalleVenta($id){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "select * FROM `DetalleVenta` where venta_id=".$id;
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$users = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($users)>0){
+						return $users;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		public function getLocations(){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "select lat, lng,nombre,id_tienda FROM `tienda`";
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		public function getStoresInfo($id){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "select * FROM `tienda` where id_tienda=".$id;
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
 					}else{
 						return array();				
 					}

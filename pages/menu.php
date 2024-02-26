@@ -41,10 +41,10 @@
                       <a class="nav-link active" aria-current="page" href="main.php">Inicio</a>
                     </li>
                     <li onmouseover="displayLock_()" onmouseout="displayUnlock_()"class="nav-item ">
-                      <a  class="nav-link">Productos</a>
+                      <a  class="nav-link">Insumos</a>
                       <ul id="remover_" class="position-fixed d-none list-unstyled">
                         <li class="nav-item bg-light">
-                            <a class="nav-link"  href="stock.php?name=all&model=id">Existencias</a>
+                            <a class="nav-link"  href="insumos.php">Existencias</a>
                         </li>
                         <li class="nav-item bg-light">
                             <a class="nav-link d-none"  href="setProducInfo.php">Categorias</a>
@@ -54,32 +54,6 @@
                         </li>
                       </ul>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="settingStore.php">Crear Tienda</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="sttingUsers.php">Crear Usuarios</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link d-none" href="updatePhone.php">Subir Equipos</a>
-                    </li>
-                    <li onmouseover="displayLock()" onmouseout="displayUnlock()"class="nav-item ">
-                      <a  class="nav-link">Orden De Servicio</a>
-                      <ul id="remover" class="position-fixed d-none list-unstyled">
-                        <li class="nav-item bg-light">
-                            <a class="nav-link"  href="serviceOrder.php">Nueva Orden De Servicio</a>
-                        </li>
-                        <li class="nav-item bg-light">
-                            <a class="nav-link"  href="serviceOrderGeneral.php?select=all">Ordenes De Servicio</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link d-none " href="stadistics.php">Estadisticas</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="d-none nav-link" href="#">Reporte de Ventas</a>
-                    </li> 
                     <li class="nav-item">
                       <form action="../app/reportController.php" method="POST">
                           <input type="hidden" name="action" value="logout">

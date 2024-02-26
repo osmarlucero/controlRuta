@@ -260,4 +260,23 @@
 		}
 		
 }
+/*
+CREATE PROCEDURE `stockControlUser` (IN 'stockDejado' INT, IN `idArticulo` INT,IN `idVendedor` INT)   BEGIN
+    -- Declarar variables para almacenar los valores actuales y nuevos
+    DECLARE stock_actual INT;
+    DECLARE nuevo_stock INT;
+    DECLARE id_nuevo INT;
+    -- Obtener el stock actual del insumo con id = id
+    SELECT cantidad INTO stock_actual FROM InventarioVendedor WHERE id_vendedor = idVendedor AND id_articulo = idArticulo LIMIT 1;
+    SELECT id INTO id_nuevo FROM InventarioVendedor WHERE id_vendedor = idVendedor AND id_articulo = idArticulo LIMIT 1;
+
+    -- Calcular el nuevo stock restando la cantidad especificada
+    SET nuevo_stock = stock_actual - stockDejado;
+
+	-- Actualizar el stock solo para el registro con id = id
+    UPDATE InventarioVendedor SET cantidad = nuevo_stock WHERE id = id_nuevo;
+END$$
+
+DELIMITER ;
+*/
 ?>

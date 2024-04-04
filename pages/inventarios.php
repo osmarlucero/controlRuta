@@ -1,7 +1,7 @@
 <?php
     include "../app/categoryController.php";
     $categoryController = new categoryController();
-    $users = $categoryController->getUsers();
+    $users = $categoryController->getStocks($_GET['id']);
    
     /*if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
@@ -27,7 +27,7 @@
         </script> 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-            const itemsPerPage = 5;
+            const itemsPerPage = 10;
             const itemList = document.querySelector('.item-list');
             const paginationContainer = document.getElementById('pagination');
 
@@ -70,8 +70,7 @@
                 <p class="">Usuarios Existentes</p><a href="createUser.php">Crear Usuario</a>
                 <ul class="ulMain item-list">
                     <?php foreach ($users as $user): ?>
-                    <li><?= $user['id'] ?> | <?= $user['nombre'] ?>  <?= $user['apellido'] ?> Rol:<?= $user['rol'] ?>
-                    <a href="editUser.php?id=<?= $user['id'] ?>">Editar</a>                       
+                    <li><?= $user['id'] ?> | <?= $user['nombre'] ?> | <?= $user['cantidad'] ?> | <a href="editUser.php?id=<?= $user['id'] ?>">Editar</a>                       
                     </li>        
                     <?php endforeach ?>
                     <!-- Agrega más elementos del formulario según sea necesario -->

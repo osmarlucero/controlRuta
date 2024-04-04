@@ -1,0 +1,229 @@
+{
+  "emisor": {
+    "rfc": "GOYA780416GM0",
+    "nombre": "EMPRESA DEMOSTRACIÓN",
+    "regimenFiscal": "605",
+    "sucursal": {
+      "nombre": "cancun 2021",
+      "pais": "MEX",
+      "estado": "ROO",
+      "municipio": "005",
+      "localidad": "01",
+      "colonia": "0168",
+      "calle": "qq",
+      "codigoPostal": "77500",
+      "correo": null
+    }
+  },
+  "receptor": {
+    "rfc": "EWE1709045U0",
+    "nombre": "ESCUELA WILSON ESQUIVEL",
+    "domicilioFiscalReceptor": "94915",
+    "regimenFiscalReceptor": "622",
+    "usoCFDI": "G01",
+    "direccion": {
+      "nombre": "Principal",
+      "pais": "MEX",
+      "estado": "VER",
+      "codigoPostal": "77534",
+      "correo": null
+    }
+  },
+  "conceptos": [
+    {
+      "impuestos": {
+        "traslados": [
+          {
+            "base": 100,
+            "impuesto": "002",
+            "tipoFactor": "Tasa",
+            "tasaOCuota": 0.16,
+            "importe": 16
+          }
+        ]
+      },
+      "claveProdServ": "25101503",
+      "noIdentificacion": "ENS-044",
+      "cantidad": 1,
+      "claveUnidad": "H87",
+      "descripcion": "CARTERA",
+      "valorUnitario": 100,
+      "importe": 100,
+      "objetoImp": "02"
+    }
+  ],
+  "impuestos": {
+    "traslados": [
+      {
+        "base": 100,
+        "impuesto": "002",
+        "tipoFactor": "Tasa",
+        "tasaOCuota": 0.16,
+        "importe": 16
+      }
+    ],
+    "totalImpuestosTrasladados": 16
+  },
+  "version": "4.0",
+  "serie": "001",
+  "folio": "4475",
+  "fecha": "2022-07-11T16:55:26",
+  "formaPago": "01",
+  "subTotal": 100,
+  "moneda": "MXN",
+  "tipoCambio": 1,
+  "total": 116,
+  "tipoDeComprobante": "I",
+  "exportacion": "01",
+  "metodoPago": "PUE",
+  "lugarExpedicion": "77500",
+  "serieId": 1395
+}
+package com.example.icrc;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class facturar extends AppCompatActivity {
+    RequestQueue requestQueue;
+    String URL1 = "https://authcli.stagefacturador.com/connect/token";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestQueue = Volley.newRequestQueue(this); // Instancia de la cola de solicitudes
+        setContentView(R.layout.activity_facturar);
+    }
+
+    public void fact(View v) {
+        // Realizar la solicitud POST con la contraseña en formato MD5
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST, URL1, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    // Convertir la respuesta JSON a un objeto JSONObject
+                    JSONObject jsonResponse = new JSONObject(response);
+
+                    // Extraer los valores de access_token y refresh_token del objeto JSON
+                    String accessToken = jsonResponse.getString("access_token");
+                    Toast.makeText(facturar.this, accessToken, Toast.LENGTH_SHORT).show();
+                    Log.e("Token:", accessToken);
+                    obtenerEmisorId(accessToken);
+
+                    // Hacer lo que necesites con accessToken y refreshToken
+                    // Por ejemplo, almacenarlos en SharedPreferences para usarlos más tarde
+                    // o pasarlos a otra actividad
+                } catch (JSONException e) {
+                    // Manejar errores de análisis JSON
+                    e.printStackTrace();
+                    Toast.makeText(facturar.this, "Error al analizar la respuesta del servidor", Toast.LENGTH_SHORT).show();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Manejar el error
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            // Error de la red, se obtiene el mensaje de error del servidor si está disponible
+                            String errorResponse = new String(error.networkResponse.data);
+                            Toast.makeText(facturar.this, "Error de red: " + errorResponse, Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Error desconocido o sin respuesta del servidor
+                            Toast.makeText(facturar.this, "Error desconocido: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                // Aquí puedes agregar otros parámetros necesarios
+                params.put("scope", "offline_access openid APINegocios"); // Agregar el ámbito (scope)
+                params.put("username", "GOYA780416GM0"); // Agregar el nombre de usuario
+                params.put("client_secret", "D2EBED43-3DAD-48E8-906A-1B2221C63062"); // Agregar el secreto del cliente
+                params.put("password", "20b03da6247eb1ba4a04c3bda7285c94"); // Agregar la contraseña en formato MD5
+                params.put("grant_type", "password"); // Agregar el tipo de concesión (grant type)
+                params.put("es_md5", "true"); // Indicar si la contraseña está en formato MD5
+                params.put("client_id", "webconector1"); // Agregar el identificador del cliente
+                return params;
+            }
+        };
+
+        requestQueue.add(stringRequest); // Agregar la solicitud a la cola
+    }
+
+    public void obtenerEmisorId(String accessToken) {
+        String url = "https://authcli.stagefacturador.com/connect/userinfo";
+
+        // Crear un objeto JSON vacío para la solicitud (ya que es una solicitud GET)
+        JSONObject jsonRequest = new JSONObject();
+
+        // Crear una solicitud GET con los encabezados adecuados
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, jsonRequest, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Obtener el emisorId del objeto de respuesta JSON
+                            String emisorid = response.getString("emisorid");
+                            Toast.makeText(facturar.this, "emisorid" + emisorid, Toast.LENGTH_SHORT).show();
+                            //makeFact(emisorid);
+                            // Haz lo que necesites con el emisorId, como mostrarlo en un TextView
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Manejar errores de análisis JSON
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Manejar errores de la solicitud
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            // Error de la red, se obtiene el mensaje de error del servidor si está disponible
+                            String errorResponse = new String(error.networkResponse.data);
+                            // Manejar el mensaje de error de acuerdo a tus necesidades
+                        } else {
+                            // Error desconocido o sin respuesta del servidor
+                        }
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                // Adjuntar los encabezados adecuados a la solicitud
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer " + accessToken);
+                return headers;
+            }
+        };
+
+        // Agregar la solicitud a la cola de solicitudes de Volley
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+    }
+    // Función para convertir una cadena a su equivalente en MD5
+}

@@ -1,8 +1,8 @@
 <?php
-	define("HOST", "bstaaxredphdizbd8zrh-mysql.services.clever-cloud.com");
-	define("USER", "utu8ouwielrititx");
-	define("PSWD", "zKuHRes615gaRilyEcUd");
-	define("DBNM", "bstaaxredphdizbd8zrh");
+	define("HOST", "srv901.hstgr.io");
+	define("USER", "u848276287_root");
+	define("PSWD", "Fixcel016_");
+	define("DBNM", "u848276287_system");
 
 	function connect(){
 		$conn = new mysqli(HOST,USER,PSWD,DBNM);

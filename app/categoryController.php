@@ -182,7 +182,27 @@
 			if(true){
 	 			$conn = connect();
 				if ($conn->connect_error==false){			
-					$query = "select * FROM `Ventas`";
+					$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda;";
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$users = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($users)>0){
+						return $users;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		public function getStats(){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "SELECT nombre_articulo AS nombre, SUM(cantidad) AS ventas FROM detalleventa GROUP BY nombre_articulo;";
 					$prepared_query = $conn->prepare($query);
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
@@ -202,7 +222,7 @@
 			if(true){
 	 			$conn = connect();
 				if ($conn->connect_error==false){			
-					$query = "select * FROM `DetalleVenta` where venta_id=".$id;
+					$query = "select * FROM `detalleventa` where venta_id=".$id;
 					$prepared_query = $conn->prepare($query);
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
@@ -222,7 +242,7 @@
 			if(true){
 	 			$conn = connect();
 				if ($conn->connect_error==false){			
-					$query = "select lat, lng,nombre,id_tienda FROM `tienda`";
+					$query = "select * FROM `tienda`";
 					$prepared_query = $conn->prepare($query);
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
@@ -258,25 +278,25 @@
 			}else
 				return array();
 		}
+		public function getStocks($id){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "select * FROM `inventariovendedor` where id_vendedor=".$id;
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
 		
 }
-/*
-CREATE PROCEDURE `stockControlUser` (IN 'stockDejado' INT, IN `idArticulo` INT,IN `idVendedor` INT)   BEGIN
-    -- Declarar variables para almacenar los valores actuales y nuevos
-    DECLARE stock_actual INT;
-    DECLARE nuevo_stock INT;
-    DECLARE id_nuevo INT;
-    -- Obtener el stock actual del insumo con id = id
-    SELECT cantidad INTO stock_actual FROM InventarioVendedor WHERE id_vendedor = idVendedor AND id_articulo = idArticulo LIMIT 1;
-    SELECT id INTO id_nuevo FROM InventarioVendedor WHERE id_vendedor = idVendedor AND id_articulo = idArticulo LIMIT 1;
-
-    -- Calcular el nuevo stock restando la cantidad especificada
-    SET nuevo_stock = stock_actual - stockDejado;
-
-	-- Actualizar el stock solo para el registro con id = id
-    UPDATE InventarioVendedor SET cantidad = nuevo_stock WHERE id = id_nuevo;
-END$$
-
-DELIMITER ;
-*/
-?>

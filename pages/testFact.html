@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturador.com Autenticación</title>
+</head>
+<body>
+    <h2>Autenticación en Facturador.com</h2>
+    <form id="authForm">
+        <label for="username">RFC:</label><br>
+        <input type="text" id="username" name="username" value="GOYA780416GM0"><br>
+        <label for="password">Contraseña:</label><br>
+        <input type="password" id="password" name="password" value="Dotnet_1"><br>
+        <button type="button" onclick="authenticate()">Autenticar</button>
+    </form>
+
+    <h2>Actualizar Token</h2>
+    <form id="refreshTokenForm">
+        <label for="refreshToken">Refresh Token:</label><br>
+        <input type="text" id="refreshToken" name="refreshToken" value="SUREFRESHTOKEN"><br>
+        <button type="button" onclick="refreshToken()">Actualizar Token</button>
+    </form>
+
+    <h2>Obtener EmisorId</h2>
+    <button type="button" onclick="getEmisorId()">Obtener EmisorId</button>
+
+    <script>
+        function authenticate() {
+            var formData = new FormData(document.getElementById("authForm"));
+            fetch('https://authcli.stagefacturador.com/connect/token', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error de red o datos incorrectos.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Access Token:', data.access_token);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+        }
+
+        function refreshToken() {
+            var refreshToken = document.getElementById("refreshToken").value;
+            fetch('https://authcli.stagefacturador.com/connect/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `grant_type=refresh_token&refresh_token=${refreshToken}&client_id=webconector1&client_secret=D2EBED43-3DAD-48E8-906A-1B2221C63062`
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error de red o datos incorrectos.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('New Access Token:', data.access_token);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+        }
+
+        function getEmisorId() {
+            fetch('https://authcli.stagefacturador.com/connect/userinfo', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ACCESS_TOKEN',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error de red o autorización.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('EmisorId:', data.emisorid);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+        }
+    </script>
+</body>
+</html>

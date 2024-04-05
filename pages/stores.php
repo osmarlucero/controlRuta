@@ -140,7 +140,7 @@
                     <div id="mainContainer">
                     <ul class="ulMain item-list">
                         <?php foreach ($users as $user): ?>
-                        <li><?= $user['id_tienda'] ?> | <?= $user['nombre'] ?>  <?= $user['nombre_responsable'] ?> Rol:<?= $user['telefono'] ?>
+                        <li><?= $user['id_tienda'] ?> | <?= $user['nombre'] ?> || <?= $user['nombre_responsable'] ?> || Rol:<?= $user['telefono'] ?>
                        <a href="storeInfo.php?id=<?= $user['id_tienda'] ?>">Ver</a>                       
                         </li>        
                         <?php endforeach ?>

@@ -298,5 +298,53 @@
 			}else
 				return array();
 		}
+		public function getIncidents(){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "SELECT incidentes.*, tienda.nombre AS nombre_tienda FROM incidentes JOIN tienda ON incidentes.tienda_id = tienda.id_tienda ORDER BY `incidentes`.`id` DESC;";
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		public function getIncidentsDetail($id){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "SELECT incidentes.*, 
+						       tienda.nombre AS nombre_tienda,
+						       incidentes.latitud AS lat,
+						       incidentes.longitud AS lng
+						FROM incidentes 
+						JOIN tienda ON incidentes.tienda_id = tienda.id_tienda 
+						WHERE incidentes.id = ".$id." 
+						ORDER BY incidentes.id DESC;";
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		
 		
 }

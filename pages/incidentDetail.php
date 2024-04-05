@@ -97,18 +97,17 @@
                              <th colspan="2" class="text-center">Imagen Incidente</th>
                         </tr>
                         <tr>
-                            <td colspan="2">
-                                <img src="https://grupocoronador.com/conn/<?= $incident['ubi'] ?>" style="
-    max-width: 400px;
-">
-                            </td>
+                           <td colspan="2" style="text-align: center;">
+    <img src="https://grupocoronador.com/conn/<?= $incident['ubi'] ?>" style="max-width: 400px; max-height: 400px; display: inline-block;">
+</td>
+
                         </tr>
                         <tr>
                              <th colspan="2" class="text-center">Ubicacion</th>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <div id="map" style="width: 100%; height: 200px;"></div>
+                                <div id="map" style="width: 100%; height: 300px;"></div>
                             </td>
                         </tr>
                     <?php endforeach ?>

@@ -97,75 +97,85 @@
     </script>
 </head>
 <body>
-
     <header id="header"></header>
     <!-- Formulario 1: Usuarios -->
     <main class="container d-flex align-items-center justify-content-center">
-        <div class="mainContainer">
-            <h2 class="mb-4">Datos De Tienda</h2>
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped" style="background-color: white;">
-                    <?php foreach ($users as $user): ?>
-                        <tr>
-                            <th style="width: 30%;">ID</th>
-                            <td style="width: 70%;"><?= $user['id_tienda'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Nombre</th>
-                            <td><?= $user['nombre'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Nombre Responsable</th>
-                            <td><?= $user['nombre_responsable'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Dirección</th>
-                            <td><?= $user['direccion'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Correo</th>
-                            <td><?= $user['correo'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>RFC</th>
-                            <td><?= $user['RFC'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Teléfono</th>
-                            <td><?= $user['telefono'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Fecha Creación</th>
-                            <td><?= $user['fecha_creacion'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Fecha Última Visita</th>
-                            <td><?= $user['fecha_ultima_visita'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Vendedor</th>
-                            <td><?= $user['vendedor'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Precio</th>
-                            <td><?= $user['precio'] ?></td>
-                        </tr> 
-                        <tr>
-                            <th>Codigo</th>
-                            <td><canvas id="barcode" onclick="printl();"></canvas></td>
-                        </tr> 
-                        <tr>
-                             <th colspan="2" class="text-center">Ubicacion</th>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div id="map" style="width: 100%; height: 400px;"></div>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                </table>
+        <form class="mainContainer" action="../app/categoryController.php" method="POST">
+        <div class="">
+        <div class="row">
+            <div class="col-6">
+                <h2 class="mb-4">Datos De Tienda</h2>
+            </div>
+            <div class="col-6">
+                <button type="submit" class="text-center btn btn-secondary">Actualizar</button>
             </div>
         </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped" style="background-color: white;">
+                        <?php foreach ($users as $user): ?>
+                            <tr>
+                                <th style="width: 30%;">ID</th>
+                                <td style="width: 70%;"><?= $user['id_tienda'] ?></td>
+                                <input type="hidden" name="id" value="<?= $user['id_tienda'] ?>">
+                            </tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <td><input type="text" name="nombre" value="<?= $user['nombre'] ?>"></td>
+                            </tr>
+                            <tr>
+                                <th>Nombre Responsable</th>
+                                <td><input type="text" name="nombre_responsable" value="<?= $user['nombre_responsable'] ?>"></td>
+                            </tr>
+                            <tr>
+                                <th>Dirección</th>
+                                <td><input type="text" name="direccion" value="<?= $user['direccion'] ?>"></td>
+                            </tr>
+                            <tr>
+                                <th>Correo</th>
+                                <td><input type="text" name="correo" value="<?= $user['correo'] ?>"></td>
+                            </tr>
+                            <tr>
+                                <th>RFC</th>
+                                <td><input type="text" name="RFC" value="<?= $user['RFC'] ?>"></td>
+                            </tr>
+                            <tr>
+                                <th>Teléfono</th>
+                                <td><input type="text" name="telefono" value="<?= $user['telefono'] ?>"></td>
+                            </tr>
+                            <tr>
+                                <th>Fecha Creación</th>
+                                <td><?= $user['fecha_creacion'] ?></td>
+                            </tr>
+                            <tr>
+                                <th>Fecha Última Visita</th>
+                                <td><?= $user['fecha_ultima_visita'] ?></td>
+                            </tr>
+                            <tr>
+                                <th>Vendedor</th>
+                                <td><input type="text" name="vendedor" value="<?= $user['vendedor'] ?>"></td>
+                            </tr>
+                            <tr>
+                                <th>Precio</th>
+                                <td><input type="text" name="precio" value="<?= $user['precio'] ?>"></td>
+                            </tr> 
+                            <tr>
+                                <th>Codigo</th>
+                                <td><canvas id="barcode" onclick="printl();"></canvas></td>
+                            </tr> 
+                            <tr>
+                                 <th colspan="2" class="text-center">Ubicacion</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div id="map" style="width: 100%; height: 400px;"></div>
+                                </td>
+                            </tr>
+                            <input type="hidden" name="action" value="editStore">
+                        <?php endforeach ?>
+                    </table>
+                </div>
+        </div>
+        </form>
     </main>
 </body>
 </html>

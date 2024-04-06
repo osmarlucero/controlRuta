@@ -33,6 +33,20 @@
 				$cantidad = strip_tags($_POST['cantidad']);
 				$CategoryController->updateStock($id, $idDon, $cantidad);
 			break;
+			case 'editStore':
+				$id_tienda = strip_tags($_POST['id']);
+				$nombre = strip_tags($_POST['nombre']);
+				$nombre_responsable = strip_tags($_POST['nombre_responsable']);
+				$direccion = strip_tags($_POST['direccion']);
+				$correo = strip_tags($_POST['correo']);
+				$RFC = strip_tags($_POST['RFC']);
+				$telefono = strip_tags($_POST['telefono']);
+				$vendedor = strip_tags($_POST['vendedor']);
+				$precio = strip_tags($_POST['precio']);
+
+				$CategoryController->updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio);
+
+			break;
 		}
 	}
 
@@ -43,6 +57,29 @@
 		        $query = "CALL stockControl(?, ?, ?)";
 		        $prepared_query = $conn->prepare($query);
 		        $prepared_query->bind_param('iii', $id, $idDon, $cantidad);
+
+		        if ($prepared_query->execute()) {
+		            // El procedimiento se ejecutó correctamente
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		            $_SESSION['success'] = "Datos enviados correctamente";
+		        } else {
+		            // Error al ejecutar el procedimiento
+		            $_SESSION['error'] = "Error al ejecutar el procedimiento almacenado";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        }
+		    } else {
+		        // Error en la conexión a la base de datos
+		        $_SESSION['error'] = "Conexión Mala BD";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		    }
+		}
+		public function updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio) {
+		    $conn = connect();
+		    if ($conn->connect_error == false) {
+		        $query = "UPDATE tienda SET nombre = ?, nombre_responsable = ?, direccion = ?, correo = ?, RFC = ?, telefono = ?, vendedor = ?, precio = ?
+		         WHERE id_tienda = ?";
+		        $prepared_query = $conn->prepare($query);
+		        $prepared_query->bind_param('ssssssiii',$nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$id_tienda);
 
 		        if ($prepared_query->execute()) {
 		            // El procedimiento se ejecutó correctamente
@@ -222,10 +259,16 @@
 			if(true){
 	 			$conn = connect();
 	 			$id=$_SESSION['id'];
-
-				if ($conn->connect_error==false){			
-					$query = "SELECT nombre_articulo AS nombre, SUM(cantidad) AS ventas FROM detalleventa GROUP BY nombre_articulo;";
-					$prepared_query = $conn->prepare($query);
+				if ($conn->connect_error==false){
+					if($_SESSION['rol']=="Admin"){
+						$query = "SELECT nombre_articulo AS nombre, SUM(cantidad) AS ventas FROM detalleventa GROUP BY nombre_articulo;";
+						$prepared_query = $conn->prepare($query);
+					}
+					else{
+						$query = "SELECT nombre_articulo AS nombre, SUM(cantidad) AS ventas FROM detalleventa where venta_id=(SELECT venta_id FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.id_vendedor = (SELECT id FROM users WHERE encargado = ?) ORDER BY v.venta_id DESC) GROUP BY nombre_articulo;";
+						$prepared_query = $conn->prepare($query);
+						$prepared_query->bind_param('i',$id);
+					}
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
 					$users = $results->fetch_all(MYSQLI_ASSOC);
@@ -263,9 +306,17 @@
 		public function getLocations(){
 			if(true){
 	 			$conn = connect();
-				if ($conn->connect_error==false){			
-					$query = "select * FROM `tienda`";
-					$prepared_query = $conn->prepare($query);
+	 			$id=$_SESSION['id'];
+				if ($conn->connect_error==false){
+					if($_SESSION['rol']=="Admin"){
+						$query = "select * FROM tienda";
+						$prepared_query = $conn->prepare($query);
+					}
+					else{
+						$query = "SELECT * from tienda where vendedor = (SELECT id FROM users WHERE encargado = ?)";
+						$prepared_query = $conn->prepare($query);
+						$prepared_query->bind_param('i',$id);
+					}			
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
 					$stores = $results->fetch_all(MYSQLI_ASSOC);

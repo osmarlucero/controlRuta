@@ -1,17 +1,19 @@
 <?php
-	/*if (!isset($_SESSION)) {
+	if (!isset($_SESSION)) {
     session_start();
-	}*/
+	}
 	include_once "connectionController.php";
 	if(isset($_POST['action'])){
 		$CategoryController = new CategoryController();
 		switch ($_POST['action']) {
 			case 'storeUser':
-				$id = strip_tags($_POST['id']);
+				$id = 1;
 				$nombre = strip_tags($_POST['nombre']);
 				$apellido = strip_tags($_POST['apellido']);
 				$rol = strip_tags($_POST['rol']);
-				$CategoryController->storeUser($id, $nombre, $apellido,$rol);
+				$mac = strip_tags($_POST['mac']);
+				$pass = strip_tags($_POST['password']);
+				$CategoryController->storeUser($id, $nombre, $apellido,$rol,$mac,$pass);
 			break;
 			case 'getLocation':
 				$CategoryController->getLocations();
@@ -57,13 +59,16 @@
 		        header("Location:" . $_SERVER["HTTP_REFERER"]);
 		    }
 		}
-		public function storeUser($id, $nombre, $apellido,$rol){
+		public function storeUser($id, $nombre, $apellido,$rol,$mac,$pass){
 			$conn = connect();
+			$pass= $pass."Hola";
+			$pass_md5=md5($pass);
 			if ($conn->connect_error==false){
 				if($id!=""){
-						$query="insert into users (id, nombre, apellido,rol) VALUES (?,?,?,?)";
+						$query="insert into users (nombre, apellido,rol,mac_impresora,password_md5) VALUES (?,?,?,?,?)";
 						$prepared_query = $conn->prepare($query);
-						$prepared_query->bind_param('isss',$id, $nombre, $apellido, $rol);
+
+						$prepared_query->bind_param('sssss', $nombre, $apellido, $rol,$mac,$pass_md5);
 						if($prepared_query->execute()){
 							header("Location:".$_SERVER["HTTP_REFERER"]);
 							$_SESSION['success'] ="Datos enviados correctaqmente";
@@ -109,9 +114,16 @@
 		//****
 		public function getUsers(){
  			$conn = connect();
-			if ($conn->connect_error==false){			
-				$query = "select * FROM `users`";
-				$prepared_query = $conn->prepare($query);
+ 			$id=$_SESSION['id'];
+			if ($conn->connect_error==false){
+				if($_SESSION['rol']!="Admin"){	
+					$query = "select * FROM `users`where encargado =? ORDER BY `users`.`id` DESC;";
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->bind_param('i',$id);
+				}else{
+					$query = "select * FROM `users` ORDER BY `users`.`id` DESC;";
+					$prepared_query = $conn->prepare($query);
+				}
 				$prepared_query->execute();
 				$results = $prepared_query->get_result();
 				$users = $results->fetch_all(MYSQLI_ASSOC);
@@ -181,9 +193,17 @@
 		public function getVentas(){
 			if(true){
 	 			$conn = connect();
-				if ($conn->connect_error==false){			
-					$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda;";
-					$prepared_query = $conn->prepare($query);
+	 			$id=$_SESSION['id'];
+				if ($conn->connect_error==false){	
+					if($_SESSION['rol']=="Admin"){
+						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda ORDER BY `v`.`venta_id` DESC";
+						$prepared_query = $conn->prepare($query);
+					}
+					else{
+						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.id_vendedor = (SELECT id FROM users WHERE encargado = ?) ORDER BY v.venta_id DESC;";
+						$prepared_query = $conn->prepare($query);
+						$prepared_query->bind_param('i',$id);
+					}
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
 					$users = $results->fetch_all(MYSQLI_ASSOC);
@@ -201,6 +221,8 @@
 		public function getStats(){
 			if(true){
 	 			$conn = connect();
+	 			$id=$_SESSION['id'];
+
 				if ($conn->connect_error==false){			
 					$query = "SELECT nombre_articulo AS nombre, SUM(cantidad) AS ventas FROM detalleventa GROUP BY nombre_articulo;";
 					$prepared_query = $conn->prepare($query);

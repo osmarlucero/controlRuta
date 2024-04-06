@@ -3,9 +3,9 @@
     $categoryController = new categoryController();
     $users = $categoryController->getUsers();
    
-    /*if(isset($_SESSION)==false  || $_SESSION['id']==false){
+    if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
-    }*/
+    }
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,63 +18,7 @@
     <link rel="StyleSheet" href="../CSS/colorFullUsers.css?v=0.0.2" />
     <link rel="StyleSheet" href="../CSS/uploadCSS.css?v=0.0.2" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            margin-top: 20px;
-        }
-
-        .mainContainer {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .mainContainer p {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .ulMain {
-            list-style: none;
-            padding: 0;
-        }
-
-        .ulMain li {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-            font-size: 1.1rem;
-            color: #333;
-        }
-
-        .ulMain li a {
-            margin-left: 10px;
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .pagination li {
-            display: inline-block;
-            margin-right: 10px;
-            cursor: pointer;
-            color: #007bff;
-        }
-
-        .pagination li:hover {
-            text-decoration: underline;
-        }
+        
     </style>
     <script src="../app/jquery-3.5.1.min.js"></script>
     <script>
@@ -83,7 +27,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            const itemsPerPage = 5;
+            const itemsPerPage = 10;
             const itemList = document.querySelector('.item-list');
             const paginationContainer = document.getElementById('pagination');
 
@@ -116,7 +60,7 @@
     </script>
 </head>
 
-<body style="background-color: #cf6338;">
+<body>
 
     <header id="header"></header>
     <!-- Formulario 1: Usuarios -->
@@ -133,7 +77,7 @@
             </ul>
         </div>
     </main>
-    <div id="pagination" class="pagination"></div>
+    <div  class="pagination"><ul id="pagination"></ul></div>
 
 </body>
 

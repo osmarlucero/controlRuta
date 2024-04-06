@@ -4,9 +4,9 @@
     $insumos = $categoryController->getVentas();
     $cantidades = $categoryController->getStats();
    
-    /*if(isset($_SESSION)==false  || $_SESSION['id']==false){
+    if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
-    }*/
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -97,11 +97,17 @@
      <style>
         .nav-item {
             cursor: pointer;
-            background-color: #ff6b3d;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
             margin-right: 10px;
+        }
+        .btn-p{
+            background-color: #000000;
+            color: white;
+        }
+        #lista-ventas{
+            margin-top: 5%;
         }
     </style>
 </head>
@@ -110,10 +116,10 @@
     <header id="header"></header>
     <!-- Formulario 1: Usuarios -->
     <main class="container d-flex align-items-center justify-content-center">
-        <div class="mainContainer" style="background-color: #cf6338;">
+        <div class="mainContainer">
             <ul class="nav">
-                <li class="nav-item" onclick="onAdd()">Ventas Realizadas</li>
-                <li class="nav-item" onclick="onRemove()">Estadisticas</li>
+                <li class="nav-item btn-p" onclick="onAdd()">Ventas Realizadas</li>
+                <li class="nav-item btn-p" onclick="onRemove()">Estadisticas</li>
             </ul>
             <ul id="tableItems" class="ulMain item-list">
                <table id="salesTable" class="default">
@@ -142,7 +148,7 @@
                 </table>
                 <!-- Agrega más elementos del formulario según sea necesario -->
             </ul>
-             <ul id="lista-ventas" class="d-none"><canvas id="grafico-ventas" width="400" height="200"></canvas></ul>
+             <ul id="lista-ventas" class="d-none" style="background-color: white;"><canvas id="grafico-ventas" width="400" height="200"></canvas></ul>
              <script>
     // Datos de ejemplo para las ventas
     const datosVentas = <?php echo json_encode($cantidades); ?>;
@@ -160,37 +166,37 @@
 
     // Crear el gráfico
     const ctx = document.getElementById('grafico-ventas').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: nombresProductos,
-            datasets: [{
-                label: 'Ventas',
-                data: ventasProductos,
-                backgroundColor: paletaColores,
-                borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
-                borderWidth: 1,
-                datalabels: {
-                    anchor: 'end',
-                    align: 'top'
-                }
-            }]
-        },
-        options: {
-            plugins: {
-                datalabels: {
-                    formatter: function(value, context) {
-                        return value;
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
+const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: nombresProductos,
+        datasets: [{
+            label: 'Ventas',
+            data: ventasProductos,
+            backgroundColor: '#3498db', // Cambiar el color de fondo a rojo
+            borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
+            borderWidth: 1,
+            datalabels: {
+                anchor: 'end',
+                align: 'top'
+            }
+        }]
+    },
+    options: {
+        plugins: {
+            datalabels: {
+                formatter: function(value, context) {
+                    return value;
                 }
             }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
         }
-    });
+    }
+});
 
     // Función para obtener un color aleatorio
     function getRandomColor() {

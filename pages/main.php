@@ -1,9 +1,9 @@
 <?php
     include "../app/categoryController.php";
     $categoryController = new categoryController();
-    /*if(isset($_SESSION)==false  || $_SESSION['id']==false){
+    if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
-    }*/
+    }
     //#a44e2c
 ?>
 

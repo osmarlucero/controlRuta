@@ -1,9 +1,18 @@
-<!DOCTYPE html>
+<?php
+    include "../app/categoryController.php";
+    $categoryController = new categoryController();
+    if(isset($_SESSION)==false  || $_SESSION['id']==false){
+        header("Location:../");
+    }
+    //#a44e2c
+?>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu</title>
+    <!-- Especifica el ícono de la pestaña del navegador -->
     <link rel="stylesheet" href="../CSS/menu.css?v=0.0.2">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -42,12 +51,20 @@
     <header id="header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <div class="container">
-                <a class="navbar-brand" href="main.php">+WIRED</a>
+                <a class="navbar-brand" href="main.php">
+    <img src="../images/logo-removebg.png" alt="Logo" style="max-width: 15%;">
+</a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <?php
+                                $nombreUsuario=$_SESSION['nombre'];
+                                echo '<span class="nav-link">Hola, ' . $nombreUsuario . '</span>'?>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="main.php">Inicio</a>
                         </li>
@@ -62,8 +79,8 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <form action="../app/reportController.php" method="POST">
-                                <input type="hidden" name="action" value="logout">
+                            <form action="../app/authController.php" method="POST">
+                                <input type="hidden" name="access" value="logout">
                                 <button id="logout-btn" type="submit" class="btn btn-sm">Cerrar Sesión</button>
                             </form>
                         </li>

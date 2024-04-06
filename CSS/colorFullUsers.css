@@ -1,8 +1,6 @@
 body {
             padding: 0;
             margin: 0;
-            background-color: #d7d7d7;
-            background-image: url(../Imagenes/yosi.png);
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -13,7 +11,6 @@ body {
             margin: 20px auto;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .ulMain {
@@ -36,9 +33,10 @@ body {
             display: flex;
             justify-content: center;
             margin-top: 20px;
-            background-color: red;
         }
+        #pagination{
 
+        }
         .pagination li {
             background-color: #3498db;
             color: #fff;
@@ -47,4 +45,54 @@ body {
             border-radius: 5px;
             cursor: pointer;
             list-style: none;
+        }
+        .container {
+            margin-top: 20px;
+        }
+
+        .mainContainer {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 66%) !important;
+        }
+
+        .mainContainer p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .ulMain {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ulMain li {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .ulMain li a {
+            margin-left: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination li {
+            display: inline-block;
+            margin-right: 10px;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .pagination li:hover {
+            text-decoration: underline;
         }

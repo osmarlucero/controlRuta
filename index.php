@@ -1,3 +1,18 @@
+<?php
+// Inicia la sesión si no está iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Verifica si hay un mensaje de error en la sesión
+if (isset($_SESSION['error'])) {
+    $error_message = $_SESSION['error'];
+    // Limpia la variable de sesión después de mostrar el mensaje
+    unset($_SESSION['error']);
+} else {
+    $error_message = ""; // Inicializa la variable de mensaje de error
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,21 +34,25 @@
         </div>
     </div>
     <div id="container">
+       
+
         <!-- Inicio primer container-->
         <div id="main">
-            <form action="app/reportController.php" method="POST">
+            <form action="app/authController.php" method="POST">
                 <div id="list_container">
                     <div class="title">
                         <h2> Iniciar Sesion.</h2>
                     </div>
                     <ul>
-                        <li><input type="text" name="user"placeholder="User" id="user" required></li>
-                        <li><input type="password" name="passLog" placeholder="Password" id="passs" required></li>
+                        <li><input type="number" name="user"placeholder="User" id="user" required></li>
+                        <li><input type="password" name="pass" placeholder="Password" id="passs" required></li>
                     </ul>
                     <div id="button_container">
                         
-                        <input type="hidden" name="action" value="login">
-                        
+                        <input type="hidden" name="access" value="login">
+                         <?php if (!empty($error_message)): ?>
+        <p style="color: red;"><?php echo $error_message; ?></p>
+        <?php endif; ?>
                         <!--<a href="Pages/start_page.php?name=Inicio" class="font_style style_login button_style">
                                 Iniciar Sesion
                         </a> -->
@@ -42,7 +61,6 @@
                             <button type="submit" class="col-5  text-center btn btn-outline-primary">
                                 Iniciar Sesion
                             </button>
-                            <a href="pages/main.php">ENTRAR</a>
                         </center>
                     </div>
                 </div>

@@ -2,9 +2,9 @@
         include "../app/categoryController.php";
         $categoryController = new categoryController();
         $users = $categoryController->getLocations();
-        /*if(isset($_SESSION)==false  || $_SESSION['id']==false){
+        if(isset($_SESSION)==false  || $_SESSION['id']==false){
             header("Location:../");
-        }*/
+        }
     ?>
     <!DOCTYPE html>
     <html lang="es">

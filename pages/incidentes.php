@@ -14,7 +14,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <meta http-equiv="Expires" content="0">
         <link rel="StyleSheet" href= "../CSS/colorFullUsers.css?v=0.0.2" />
-        <link rel="StyleSheet" href= "../CSS/uploadCSS.css?v=0.0.2" />
         <meta http-equiv="Last-Modified" content="0">
         <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
         <meta http-equiv="Pragma" content="no-cache">
@@ -24,6 +23,7 @@
             $(function(){
               $("#header").load("menu.php"); 
             });
+
         </script> 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -58,6 +58,8 @@
             showPage(1);
             });
         </script>
+       
+        
     </head>
     
 

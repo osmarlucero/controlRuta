@@ -375,8 +375,17 @@
 			if(true){
 	 			$conn = connect();
 				if ($conn->connect_error==false){			
-					$query = "SELECT incidentes.*, tienda.nombre AS nombre_tienda FROM incidentes JOIN tienda ON incidentes.tienda_id = tienda.id_tienda ORDER BY `incidentes`.`id` DESC;";
-					$prepared_query = $conn->prepare($query);
+					$id=$_SESSION['id'];
+					if ($conn->connect_error==false){
+						if($_SESSION['rol']=="Admin"){
+							$query = "SELECT incidentes.*, tienda.nombre AS nombre_tienda FROM incidentes JOIN tienda ON incidentes.tienda_id = tienda.id_tienda ORDER BY `incidentes`.`id` DESC;";
+							$prepared_query = $conn->prepare($query);
+						}
+						else{
+							$query = "SELECT incidentes.*, tienda.nombre AS nombre_tienda FROM incidentes JOIN tienda ON incidentes.tienda_id = tienda.id_tienda WHERE incidentes.id_vendedor = (SELECT id FROM users WHERE encargado = ?) ORDER BY incidentes.id DESC;";
+							$prepared_query = $conn->prepare($query);
+							$prepared_query->bind_param('i',$id);
+						}	
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
 					$stores = $results->fetch_all(MYSQLI_ASSOC);
@@ -391,6 +400,7 @@
 			}else
 				return array();
 		}
+	}
 		public function getIncidentsDetail($id){
 			if(true){
 	 			$conn = connect();

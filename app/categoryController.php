@@ -47,6 +47,11 @@
 				$CategoryController->updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio);
 
 			break;
+			case 'updateFact':
+				$update = isset($_POST['update']) ? true : false;
+				$id = strip_tags($_POST['id']);
+				$CategoryController->updateFact($update,$id);
+			break;
 		}
 	}
 
@@ -57,6 +62,28 @@
 		        $query = "CALL stockControl(?, ?, ?)";
 		        $prepared_query = $conn->prepare($query);
 		        $prepared_query->bind_param('iii', $id, $idDon, $cantidad);
+
+		        if ($prepared_query->execute()) {
+		            // El procedimiento se ejecutó correctamente
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		            $_SESSION['success'] = "Datos enviados correctamente";
+		        } else {
+		            // Error al ejecutar el procedimiento
+		            $_SESSION['error'] = "Error al ejecutar el procedimiento almacenado";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        }
+		    } else {
+		        // Error en la conexión a la base de datos
+		        $_SESSION['error'] = "Conexión Mala BD";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		    }
+		}
+		public function updateFact($update,$id) {
+		    $conn = connect();
+		    if ($conn->connect_error == false) {
+		        $query = "UPDATE notifications SET leida = ? WHERE id_noti = ?;";
+		        $prepared_query = $conn->prepare($query);
+		        $prepared_query->bind_param('ii', $update,$id);
 
 		        if ($prepared_query->execute()) {
 		            // El procedimiento se ejecutó correctamente
@@ -255,6 +282,28 @@
 			}else
 				return array();
 		}
+		public function getVentasDetail($id){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){	
+					$query = "SELECT * FROM `ventas` WHERE venta_id = ?";
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->bind_param('i',$id);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$users = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($users)>0){
+						return $users;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+
 		public function getStats(){
 			if(true){
 	 			$conn = connect();

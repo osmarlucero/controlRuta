@@ -10,11 +10,12 @@ class NotificationController {
             $id=$_SESSION['id'];
             if ($conn->connect_error == false) {
 				if($_SESSION['rol']!="Admin"){
-                	$query = "SELECT COUNT(*) AS count FROM `notifications` where id_vendedor = (SELECT id FROM users WHERE encargado = ?);";
+                	$query = "SELECT COUNT(*) AS count FROM `notifications` where id_vendedor = (SELECT id FROM users WHERE encargado = ?) and leida=0;";
                 	$prepared_query = $conn->prepare($query);
 					$prepared_query->bind_param('i',$id);
                 }else{
-                	$query = "SELECT COUNT(*) AS count FROM `notifications`";
+                	$query = "SELECT COUNT(*) AS count FROM `notifications`  where leida=0";
+                    $prepared_query = $conn->prepare($query);
                 }
                 if ($prepared_query->execute()) {
                     $result = $prepared_query->get_result();

@@ -48,16 +48,49 @@
     </style>
      <!-- Inicio manejo de notificaciones -->
     <script>
-         function consultarBaseDeDatos() {
+        let countNot=0;
+        function consultarBaseDeDatos() {
             fetch('../app/notificationController.php') // Reemplaza 'ruta/a/tu/archivo.php' con la ruta correcta
                 .then(response => response.text())
                 .then(data => {
-                    maker(data); // Aquí puedes manejar la respuesta del archivo PHP
+                    maker(data);
+                    if(data>countNot)
+                        consultarInfo(data); // Aquí puedes manejar la respuesta del archivo PHP
                 })
                 .catch(error => {
                     console.error('Hubo un error al llamar al archivo PHP:', error);
                 });
         }
+        function consultarInfo(data) {
+            fetch('../app/notificationInfoController.php') // Reemplaza 'ruta/a/tu/archivo.php' con la ruta correcta
+                .then(response => response.text())
+                .then(data => {
+                   crearNotificaciones(data);// Aquí puedes manejar la respuesta del archivo PHP
+                })
+                .catch(error => {
+                    console.error('Hubo un error al llamar al archivo PHP:', error);
+                });
+                countNot=data;
+        }
+        /***********/
+        function crearNotificaciones(data) {
+            var notificaciones = JSON.parse(data); // Parsea el JSON recibido a un objeto JavaScript
+            var dropdownMenu = document.getElementById("notiCount");
+
+            // Elimina los elementos existentes dentro del dropdown-menu
+            dropdownMenu.innerHTML = '';
+
+            // Crea un enlace <a> por cada notificación y los agrega al dropdown-menu
+            notificaciones.forEach(function(notificacion) {
+                var enlace = document.createElement("a");
+                enlace.classList.add("dropdown-item");
+                enlace.textContent = "Factura a Tienda:" + notificacion.id_tienda;
+                enlace.href = "seeFact.php?id="+notificacion.id_venta+"&idNot="+notificacion.id_noti+"&idTienda="+notificacion.id_tienda; // Aquí puedes establecer el enlace adecuado
+                dropdownMenu.appendChild(enlace);
+            });
+        }
+
+        /**************/
         function maker(num){
             // Paso 1: Seleccionar el elemento antiguo y eliminarlo
             var antiguoElemento = document.getElementById("texto");
@@ -96,26 +129,28 @@
                                     <text id="texto" x="10" y="8" font-size="10" fill="red"></text>
                                 </svg>
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="insumos.php">Existencias</a>
-                                <a class="dropdown-item" href="setProducInfo.php">Categorias</a>
-                                <a class="dropdown-item" href="upload.php">Subir Producto</a>
+                            <div id="notiCount" class="dropdown-menu" aria-labelledby="navbarDropdown">
                             </div>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="main.php">Inicio</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Insumos
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="insumos.php">Existencias</a>
-                                <a class="dropdown-item" href="setProducInfo.php">Categorias</a>
-                                <a class="dropdown-item" href="upload.php">Subir Producto</a>
-                            </div>
-                        </li>
+                       <?php
+                            if($_SESSION['rol']=="Admin"){
+                                echo '<li class="nav-item dropdown">
+                                    <a  onclick="consultarInfo()" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Insumos
+                                    </a>
+                                    <div  class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="insumos.php">Existencias</a>
+                                        <a class="dropdown-item" href="setProducInfo.php">Categorias</a>
+                                        <a class="dropdown-item" href="upload.php">Subir Producto</a>
+                                    </div>
+                                </li>';
+                            }
+                        ?>
+
                         <li class="nav-item">
                             <form action="../app/authController.php" method="POST">
                                 <input type="hidden" name="access" value="logout">

@@ -1,7 +1,8 @@
 <?php
     include "../app/categoryController.php";
     $categoryController = new categoryController();
-    $users = $categoryController->getStocks($_GET['id']);
+    $items = $categoryController->getStocks($_SESSION['id']);
+    $users = $categoryController->getUsers();
    
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
@@ -25,39 +26,6 @@
               $("#header").load("menu.php"); 
             });
         </script> 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-            const itemsPerPage = 10;
-            const itemList = document.querySelector('.item-list');
-            const paginationContainer = document.getElementById('pagination');
-
-            const totalItems = itemList.children.length;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-            // Generar botones de paginación
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('li');
-                pageButton.textContent = i;
-                pageButton.addEventListener('click', function () {
-                    showPage(i);
-                });
-                paginationContainer.appendChild(pageButton);
-            }
-
-            // Función para mostrar la página seleccionada
-            function showPage(pageNumber) {
-                const startIndex = (pageNumber - 1) * itemsPerPage;
-                const endIndex = startIndex + itemsPerPage;
-
-                for (let i = 0; i < totalItems; i++) {
-                    itemList.children[i].style.display = (i >= startIndex && i < endIndex) ? 'block' : 'none';
-                }
-            }
-
-            // Mostrar la primera página al cargar la página
-            showPage(1);
-            });
-        </script>
     </head>
     
 
@@ -67,17 +35,71 @@
         <!-- Formulario 1: Usuarios -->
         <main class="container d-flex align-items-center justify-content-center">
             <div class="mainContainer">
-                <p class="">Usuarios Existentes</p><a href="createUser.php">Crear Usuario</a>
-                <ul class="ulMain item-list">
-                    <?php foreach ($users as $user): ?>
-                    <li><?= $user['id'] ?> | <?= $user['nombre'] ?> | <?= $user['cantidad'] ?> | <a href="editUser.php?id=<?= $user['id'] ?>">Editar</a>                       
-                    </li>        
-                    <?php endforeach ?>
-                    <!-- Agrega más elementos del formulario según sea necesario -->
-                </ul>
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'propio')">Propio</button>
+                    <button class="tablinks" onclick="openTab(event, 'vendedores')">Vendedores</button>
+                </div>
+
+                <div id="propio" class="tabcontent" style="display: block;">
+                    <h2>Propio</h2>
+                    <table>
+                        <tr>
+                            <th>Artículo</th>
+                            <th>Cantidad</th>
+                        </tr>
+                        <?php foreach ($items as $item): ?>
+                            <tr>
+                                <td><?= $item['nombre'] ?></td>
+                                <td><?= $item['cantidad'] ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                    </table>
+                </div>
+
+                <div id="vendedores" class="tabcontent" style="display: none;">
+                    <h2>Vendedores</h2>
+                    <table>
+                        <tr>
+                            <th>Vendedor 1</th>
+                            <th>Cubo X Cantidad</th>
+                            <th>Cable X Cantidad</th>
+                        </tr>
+                        <tr>
+                            <td>Vendedor 1</td>
+                            <td>10</td>
+                            <td>5</td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <th>Vendedor 2</th>
+                            <th>Cubo X Cantidad</th>
+                            <th>Cable X Cantidad</th>
+                        </tr>
+                        <tr>
+                            <td>Vendedor 2</td>
+                            <td>20</td>
+                            <td>8</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </main>
-        <div id="pagination" class="pagination"></div>
-        
+
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
     </body>
 </html>

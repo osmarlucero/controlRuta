@@ -17,7 +17,6 @@
             integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
             crossorigin="anonymous">
         <link rel="stylesheet" href="../CSS/colorFullUsers.css?v=0.0.2" />
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap" async defer></script>
         <script src="../app/jquery-3.5.1.min.js"></script>
         <!-- JavaScript y Bootstrap Bundle con Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -62,7 +61,7 @@
                 if (locations.length > 0) {
                     var map = new google.maps.Map(document.getElementById('map'), {
                         center: locations[0],
-                        zoom: 12
+                        zoom: 10
                     });
 
                     // Agrega marcadores e infoWindows para cada ubicación en el array
@@ -70,7 +69,7 @@
                         addMarker(locations[i], map, locations[i].id_tienda);
                     }
                 }
-
+            }
                 function addMarker(location, map, id) {
                     var marker = new google.maps.Marker({
                         position: location,
@@ -89,7 +88,6 @@
                         infoWindow.open(map, marker);
                     });
                 }
-            }
         </script>
         <script>        
             document.addEventListener('DOMContentLoaded', function () {
@@ -124,6 +122,7 @@
                 showPage(1);
                 });
             </script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap" ></script>
     </head>
 
     <body>
@@ -140,7 +139,7 @@
                     <div id="mainContainer">
                     <ul class="ulMain item-list">
                         <?php foreach ($users as $user): ?>
-                        <li><?= $user['id_tienda'] ?> | <?= $user['nombre'] ?> || <?= $user['nombre_responsable'] ?> || Rol:<?= $user['telefono'] ?>
+                        <li><?= $user['id_tienda'] ?> | <?= $user['nombre'] ?> || <?= $user['nombre_responsable'] ?> || Numero Telefono:<?= $user['telefono'] ?>
                        <a href="storeInfo.php?id=<?= $user['id_tienda'] ?>">Ver</a>                       
                         </li>        
                         <?php endforeach ?>

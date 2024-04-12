@@ -358,7 +358,7 @@
 	 			$id=$_SESSION['id'];
 				if ($conn->connect_error==false){
 					if($_SESSION['rol']=="Admin"){
-						$query = "select * FROM tienda";
+						$query = "select * FROM tienda Order by id_tienda DESC";
 						$prepared_query = $conn->prepare($query);
 					}
 					else{
@@ -384,7 +384,7 @@
 			if(true){
 	 			$conn = connect();
 				if ($conn->connect_error==false){			
-					$query = "select * FROM `tienda` where id_tienda=".$id;
+					$query = "select * FROM `tienda` where id_tienda=".$id." Order by id_tienda DESC";
 					$prepared_query = $conn->prepare($query);
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();

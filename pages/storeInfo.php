@@ -9,7 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap" async defer></script>
+   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta http-equiv="Expires" content="0">
@@ -56,7 +56,7 @@
             if (locations.length > 0) {
                 var map = new google.maps.Map(document.getElementById('map'), {
                     center: locations[0],
-                    zoom: 12
+                    zoom: 15
                 });
 
                 // Agrega marcadores e infoWindows para cada ubicación en el array
@@ -64,8 +64,8 @@
                     addMarker(locations[i], map, locations[i].id_tienda);
                 }
             }
-
-            function addMarker(location, map, id) {
+        }
+        function addMarker(location, map, id) {
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
@@ -83,7 +83,6 @@
                     infoWindow.open(map, marker);
                 });
             }
-        }
        function printl(){
                 var sub = <?php echo json_encode($users); ?>;
                 if(sub!=""){
@@ -95,6 +94,7 @@
         
             }
     </script>
+     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap" ></script>
 </head>
 <body>
     <header id="header"></header>
@@ -161,17 +161,25 @@
                             <tr>
                                 <th>Codigo</th>
                                 <td><canvas id="barcode" onclick="printl();"></canvas></td>
+                            </tr>
+                            <tr>
+                                 <th colspan="2" class="text-center">Imagen Tienda</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                        <img src="https://grupocoronador.com/conn/<?= $user['ubicacion_imagen'] ?>" style="max-width: 400px; max-height: 400px; display: inline-block;">
+                                </td>
                             </tr> 
                             <tr>
                                  <th colspan="2" class="text-center">Ubicacion</th>
                             </tr>
                             <tr>
+                        <?php endforeach ?>
                                 <td colspan="2">
                                     <div id="map" style="width: 100%; height: 400px;"></div>
                                 </td>
                             </tr>
                             <input type="hidden" name="action" value="editStore">
-                        <?php endforeach ?>
                     </table>
                 </div>
         </div>

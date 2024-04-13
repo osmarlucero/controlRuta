@@ -28,7 +28,7 @@
             border-radius: 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .dropdown-menu a {
+        .dropdown-menu a { 
             color: #333;
         }
         .dropdown-menu a:hover {

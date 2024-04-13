@@ -9,11 +9,11 @@ class NotificationController {
 		$id=$_SESSION['id'];
         if ($conn->connect_error == false) {
             if($_SESSION['rol']=="Admin"){
-            		$query = "SELECT * FROM `notifications` where leida=0";
+            		$query = "SELECT * FROM `notifications` where leida=0 ORDER BY id_noti DESC";
             		$prepared_query = $conn->prepare($query);
 			}
 			else{
-				$query = "SELECT * FROM `notifications` WHERE id_vendedor=(SELECT id FROM users WHERE encargado = ?) and leida=0;";
+				$query = "SELECT * FROM `notifications` WHERE id_vendedor=(SELECT id FROM users WHERE encargado = ?) and leida=0 ORDER BY id_noti DESC";
 				$prepared_query = $conn->prepare($query);
 				$prepared_query->bind_param('i',$id);
 			}

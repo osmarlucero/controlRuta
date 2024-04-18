@@ -53,6 +53,19 @@ if (isset($_SESSION['error'])) {
                          <?php if (!empty($error_message)): ?>
         <p style="color: red;"><?php echo $error_message; ?></p>
         <?php endif; ?>
+        <?php
+// Definir la zona horaria deseada
+$timezone = new DateTimeZone('America/Los_Angeles'); // Por ejemplo, GMT-7
+
+// Crear un objeto DateTime con la zona horaria deseada
+$date = new DateTime('now', $timezone);
+
+// Obtener la hora en formato de 24 horas
+$hora = $date->format('Y-m-d H:i:s');
+
+echo "La hora en la zona horaria " . $timezone->getName() . " es: " . $hora;
+?>
+
                         <!--<a href="Pages/start_page.php?name=Inicio" class="font_style style_login button_style">
                                 Iniciar Sesion
                         </a> -->

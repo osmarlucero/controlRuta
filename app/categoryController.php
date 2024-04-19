@@ -52,6 +52,11 @@
 				$id = strip_tags($_POST['id']);
 				$CategoryController->updateFact($update,$id);
 			break;
+			case 'getSellsDate':
+				$dateStart = isset($_POST['dateStart']);
+				$dateEnd = strip_tags($_POST['dateEnd']);
+				$CategoryController->getVentasDate($dateStart,$dateEnd);
+			break;
 		}
 	}
 
@@ -273,6 +278,35 @@
 					$users = $results->fetch_all(MYSQLI_ASSOC);
 					if( count($users)>0){
 						return $users;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		public function getVentasDate($fechaInicio, $fechaFinal){
+			if(true){
+	 			$conn = connect();
+	 			//$id=$_SESSION['id'];
+				if ($conn->connect_error==false){	
+					if(true){
+						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.fecha_venta BETWEEN ? AND ? ORDER BY `v`.`venta_id` DESC;";
+						$prepared_query = $conn->prepare($query);
+						$prepared_query->bind_param('ss',$fechaInicio,$fechaFinal);					
+					}
+					else{
+						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.id_vendedor = (SELECT id FROM users WHERE encargado = ?) ORDER BY v.venta_id DESC;";
+						$prepared_query = $conn->prepare($query);
+						$prepared_query->bind_param('i',$id);
+					}
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$users = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($users)>0){
+						echo json_encode($users);
 					}else{
 						return array();				
 					}

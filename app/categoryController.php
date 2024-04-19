@@ -55,7 +55,8 @@
 			case 'getSellsDate':
 				$dateStart = isset($_POST['dateStart']);
 				$dateEnd = strip_tags($_POST['dateEnd']);
-				$CategoryController->getVentasDate($dateStart,$dateEnd);
+				$userM = strip_tags($_POST['userM']);
+				$CategoryController->getVentasDate($dateStart,$dateEnd,$userM);
 			break;
 		}
 	}
@@ -287,15 +288,15 @@
 			}else
 				return array();
 		}
-		public function getVentasDate($fechaInicio, $fechaFinal){
+		public function getVentasDate($fechaInicio, $fechaFinal,$user){
 			if(true){
 	 			$conn = connect();
 	 			//$id=$_SESSION['id'];
 				if ($conn->connect_error==false){	
 					if(true){
-						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.fecha_venta BETWEEN ? AND ? ORDER BY `v`.`venta_id` DESC;";
+						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.fecha_venta BETWEEN ? AND ? and id_vendedor IN(SELECT id FROM users WHERE encargado = ?) ORDER BY `v`.`venta_id` DESC;";
 						$prepared_query = $conn->prepare($query);
-						$prepared_query->bind_param('ss',$fechaInicio,$fechaFinal);					
+						$prepared_query->bind_param('ssi',$fechaInicio,$fechaFinal,$user);					
 					}
 					else{
 						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.id_vendedor = (SELECT id FROM users WHERE encargado = ?) ORDER BY v.venta_id DESC;";

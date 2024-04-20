@@ -294,7 +294,7 @@
 	 			//$id=$_SESSION['id'];
 				if ($conn->connect_error==false){	
 					if(true){
-						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.fecha_venta BETWEEN ? AND ? and id_vendedor IN(SELECT id FROM users WHERE encargado = ?) ORDER BY `v`.`venta_id` DESC;";
+						$query = "SELECT v.id_vendedor, t.id_tienda, t.nombre AS nombre_tienda, dv.nombre_articulo, SUM(dv.cantidad) AS cantidad_total FROM ventas v JOIN detalleventa dv ON v.venta_id = dv.venta_id JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.fecha_venta BETWEEN ? AND ? AND v.id_vendedor IN (SELECT id FROM users WHERE encargado = ?) GROUP BY t.id_tienda, t.nombre, dv.nombre_articulo;";
 						$prepared_query = $conn->prepare($query);
 						$prepared_query->bind_param('ssi',$fechaInicio,$fechaFinal,$user);					
 					}
@@ -307,12 +307,13 @@
 					$results = $prepared_query->get_result();
 					$users = $results->fetch_all(MYSQLI_ASSOC);
 					if( count($users)>0){
-						echo json_encode($users);
+						$json_product = json_encode($users);
+            			echo $json_product; 
 					}else{
-						return array();				
+						echo json_encode(["ERROR" => "No hay ventas en ese periodo de tiempo"]);
 					}
 				}else{
-					echo "error";
+					echo json_encode(["error" => "Error en conexion"]);
 				}
 			}else
 				return array();

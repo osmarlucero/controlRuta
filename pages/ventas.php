@@ -16,17 +16,54 @@
     <meta http-equiv="Expires" content="0">
     <link rel="StyleSheet" href="../CSS/colorFullUsers.css?v=0.0.2" />
     <link rel="StyleSheet" href="../CSS/colorFullCrateInsumos.css?v=0.0.2" />
-    <link rel="StyleSheet" href="../CSS/uploadCSS.css?v=0.0.2" />
     <meta http-equiv="Last-Modified" content="0">
     <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+<!-- Tu script personalizado aquí -->
+
+
     <title>Ventas</title>
-   <script src="../app/jquery-3.5.1.min.js"></script>
     <script>
         $(function(){
           $("#header").load("menu.php"); 
-        });
+          $(document).ready(function() {
+            $("#mostrarModal").click(function() {
+            $('#reportModal').modal('show');
+           
+          });
+        document.getElementById('generate').addEventListener('click', function() {
+        const productoInput = 15;//document.getElementById('productoInput').value;
+        const xhr = new XMLHttpRequest();
+        const url = '../app/categoryController.php';
+        const params = 'action=getSellsDate&dateStart=2024-04-12&dateEnd=2024-04-19&userM=4141';
+
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Obtener la respuesta como un objeto JSON
+                const responseData = JSON.parse(xhr.responseText);
+                
+                // Convertir el objeto JSON a una matriz
+                const dataArray = responseData.map(item => [
+                    item.nombre_articulo,
+                    item.nombre_tienda,
+                    item.cantidad_total
+                ]);
+                
+                // Mostrar la matriz en la consola
+                console.log(dataArray);
+            }
+        };
+        xhr.send(params);
+    });
+});
+        });  
     </script> 
     <script type="text/javascript">
         var cant = <?php echo json_encode($cantidades); ?>;
@@ -94,6 +131,26 @@
             }, 200); // El tiempo debe coincidir con la duración de la transición CSS
     }
     </script>
+    <!-- Incluir la biblioteca xlsx -->
+
+   <script>
+      
+        function generar(datos, nombreArchivo) {
+            // Crear un nuevo libro de Excel
+            const wb = XLSX.utils.book_new();
+
+            // Crear una nueva hoja con los datos
+            const ws = XLSX.utils.aoa_to_sheet(datos);
+
+            // Agregar la hoja al libro
+            XLSX.utils.book_append_sheet(wb, ws, "Hoja1");
+
+            // Generar el archivo Excel
+            XLSX.writeFile(wb, nombreArchivo + ".xlsx");
+        }
+</script>
+
+
      <style>
         .nav-item {
             cursor: pointer;
@@ -115,12 +172,45 @@
 
     
     <header id="header"></header>
+    <!-- -->
+    <!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModalLabel">Generar Reporte XLS</h5>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Ingresa Fecha Inicio:</label>
+            <input type="date" class="form-control" id="startDate" required>
+        </div>
+        <div class="mb-3">
+            <label for="endDate" class="form-label">Ingresa Fecha Final:</label>
+            <input type="date" class="form-control" id="endDate" required>
+        </div>
+        <div class="mb-3">
+            <label for="responsable" class="form-label">Ingresa Responsable:</label>
+            <input type="number" class="form-control" id="responsable" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="generate" >Generar XLS</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- -->
     <!-- Formulario 1: Usuarios -->
     <main class="container d-flex align-items-center justify-content-center">
         <div class="mainContainer">
             <ul class="nav">
                 <li class="nav-item btn-p" onclick="onAdd()">Ventas Realizadas</li>
                 <li class="nav-item btn-p" onclick="onRemove()">Estadisticas</li>
+                <button type="button" class="btn btn-primary" id="mostrarModal">Generar Reporte</button>
+
             </ul>
             <ul id="tableItems" class="ulMain item-list">
                <table id="salesTable" class="default">
@@ -212,6 +302,12 @@ const chart = new Chart(ctx, {
         </div>
     </main>
    <div id="pagination" class="pagination"></div>
-    
+ 
+
+<script>
+
+</script>
+
+
 </body>
 </html>

@@ -53,7 +53,7 @@
 				$CategoryController->updateFact($update,$id);
 			break;
 			case 'getSellsDate':
-				$dateStart = isset($_POST['dateStart']);
+				$dateStart = strip_tags($_POST['dateStart']);
 				$dateEnd = strip_tags($_POST['dateEnd']);
 				$userM = strip_tags($_POST['userM']);
 				$CategoryController->getVentasDate($dateStart,$dateEnd,$userM);
@@ -296,7 +296,7 @@
 					if(true){
 						$query = "SELECT v.id_vendedor, t.id_tienda, t.nombre AS nombre_tienda, dv.nombre_articulo, SUM(dv.cantidad) AS cantidad_total FROM ventas v JOIN detalleventa dv ON v.venta_id = dv.venta_id JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.fecha_venta BETWEEN ? AND ? AND v.id_vendedor IN (SELECT id FROM users WHERE encargado = ?) GROUP BY t.id_tienda, t.nombre, dv.nombre_articulo;";
 						$prepared_query = $conn->prepare($query);
-						$prepared_query->bind_param('ssi',$fechaInicio,$fechaFinal,$user);					
+						$prepared_query->bind_param('sss',$fechaInicio,$fechaFinal,$user);					
 					}
 					else{
 						$query = "SELECT v.*, t.nombre AS nombre_tienda FROM ventas v JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.id_vendedor = (SELECT id FROM users WHERE encargado = ?) ORDER BY v.venta_id DESC;";
@@ -318,6 +318,7 @@
 			}else
 				return array();
 		}
+
 		public function getVentasDetail($id){
 			if(true){
 	 			$conn = connect();
@@ -368,6 +369,34 @@
 			}else
 				return array();
 		}
+		public function getUsersStats(){
+			if(true){
+	 			$conn = connect();
+	 			$id=$_SESSION['id'];
+				if ($conn->connect_error==false){
+					if($_SESSION['rol']=="Admin"){
+						$query = "SELECT * FROM users where rol='Admin' or rol='encargado';";
+						$prepared_query = $conn->prepare($query);
+					}
+					else{
+						$query = "SELECT * FROM users where id=?";
+						$prepared_query = $conn->prepare($query);
+						$prepared_query->bind_param('i',$id);
+					}
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$users = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($users)>0){
+						return $users;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
 		public function getDEtalleVenta($id){
 			if(true){
 	 			$conn = connect();
@@ -388,6 +417,7 @@
 			}else
 				return array();
 		}
+
 		public function getLocations(){
 			if(true){
 	 			$conn = connect();

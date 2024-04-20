@@ -263,7 +263,6 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="createDate()">Cerrar</button>
         <button type="button" class="btn btn-primary" id="generate" >Generar XLS</button>
       </div>
     </div>

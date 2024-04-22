@@ -32,37 +32,40 @@
 
         <header id="header"></header>
         <!-- Formulario 1: Usuarios -->
-        <main class="container d-flex align-items-center justify-content-center">
-            <div class="mainContainer">
-                <p class="">Edicion De Usuario</p>
-                <ul class="ulMain item-list">
-                    <?php foreach ($users as $user): ?>
-                    <li>
-                         <ul class="mdm">
-                            <li>ID</li>
-                            <li>
-                                <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" disabled value=<?= $user['id'] ?>>
-                            </li>
-                        </ul>
-                        <ul class="mdm">
-                            <li>Nombre</li>
-                            <li>
-                                <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required value=<?= $user['nombre'] ?>>
-                            </li>
-                        </ul>
-                         <ul class="mdm">
-                            <li>Apellido</li>
-                            <li>
-                                <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required value=<?= $user['apellido'] ?>>
-                            </li>
-                        </ul>
+       <main class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="mainContainer">
+        <h1 class="text-center mb-4">Creación de Usuario</h1>
+        <form action="../app/categoryController.php" method="POST" id="add_form" enctype="multipart/form-data">
+            <?php foreach ($users as $user): ?>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="<?= $user['nombre'] ?>" required> 
+                    <input type="hidden" class="form-control" id="id" name="id" value="<?= $user['id'] ?>" >
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" value="<?=$user['apellido']?>" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="mac" name="mac" placeholder="M.A.C. (En caso de ser Vendedor)" value="<?=$user['mac_impresora']?>" required>
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                </div>
+                <div class="mb-3">
+                    <select class="form-select" id="rol" name="rol">
+                            <?php if ($_SESSION['rol'] === 'Admin'): ?>
+                            <option value="Administrador">Administrador</option>
+                        <?php endif; ?>
+                        <option value="Vendedor" <?php echo ($user['rol'] === 'Vendedor') ? 'selected' : ''; ?>>Vendedor</option>
+                        <option value="Encargado" <?php echo ($user['rol'] === 'Encargado') ? 'selected' : ''; ?>>Encargado</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Subir</button>
+                <input type="hidden" name="action" value="updateUser">
+            <?php endforeach; ?>
+        </form>
+    </div>
+</main>
 
-                    </li>        
-                    <?php endforeach ?>
-                    <!-- Agrega más elementos del formulario según sea necesario -->
-                </ul>
-            </div>
-        </main>
         <div id="pagination" class="pagination"></div>
         
     </body>

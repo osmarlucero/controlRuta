@@ -15,6 +15,15 @@
 				$pass = strip_tags($_POST['password']);
 				$CategoryController->storeUser($id, $nombre, $apellido,$rol,$mac,$pass);
 			break;
+			case 'updateUser':
+				$id = strip_tags($_POST['id']);;
+				$nombre = strip_tags($_POST['nombre']);
+				$apellido = strip_tags($_POST['apellido']);
+				$rol = strip_tags($_POST['rol']);
+				$mac = strip_tags($_POST['mac']);
+				$pass = strip_tags($_POST['password']);
+				$CategoryController->updateUser($id, $nombre, $apellido,$rol,$mac,$pass);
+			break;
 			case 'getLocation':
 				$CategoryController->getLocations();
 			break;
@@ -155,6 +164,32 @@
 			}
 
 		}
+		public function updateUser($id, $nombre, $apellido,$rol,$mac,$pass){
+			$conn = connect();
+			$pass= $pass."Hola";
+			$pass_md5=md5($pass);
+			if ($conn->connect_error==false){
+				if($id!=""){
+						$query="update users set nombre= ? , apellido= ?, rol=? , mac_impresora=? , password_md5=? where id = ?";
+						$prepared_query = $conn->prepare($query);
+
+						$prepared_query->bind_param('sssssi', $nombre, $apellido, $rol,$mac,$pass_md5,$id);
+						if($prepared_query->execute()){
+							header("Location:".$_SERVER["HTTP_REFERER"]);
+							$_SESSION['success'] ="Datos enviados correctaqmente";
+						}
+						else{
+							$_SESSION['error'] ="verifica datos";
+							header("Location:".$_SERVER["HTTP_REFERER"]);
+						}
+				}
+			}
+			else{
+				$_SESSION['error'] ="COnexion MAl BD";
+				header("Location:".$_SERVER["HTTP_REFERER"]);
+			}
+
+		}
 		/**
 		 * 
 		 * */
@@ -245,6 +280,48 @@
 	 			$conn = connect();
 				if ($conn->connect_error==false){			
 					$query = "select * FROM `users` where id=".$id;
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$users = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($users)>0){
+						return $users;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		public function getSellers(){
+			$id=$_SESSION['id'];
+			if($id!=1){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "SELECT * FROM users WHERE encargado =".$id;
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$users = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($users)>0){
+						return $users;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		public function getArticles($id){
+			
+			if($id!=null){
+	 			$conn = connect();
+				if ($conn->connect_error==false){			
+					$query = "SELECT * FROM inventariovendedor WHERE id_vendedor =".$id;
 					$prepared_query = $conn->prepare($query);
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();

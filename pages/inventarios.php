@@ -1,12 +1,12 @@
 <?php
+    if(isset($_SESSION)==false  || $_SESSION['id']==false){
+        header("Location:../");
+    }
     include "../app/categoryController.php";
     $categoryController = new categoryController();
     $items = $categoryController->getStocks($_SESSION['id']);
     $users = $categoryController->getUsers();
-   
-    if(isset($_SESSION)==false  || $_SESSION['id']==false){
-        header("Location:../");
-    }
+    $sellers = $categoryController->getSellers();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -26,6 +26,70 @@
               $("#header").load("menu.php"); 
             });
         </script> 
+        <style>
+    /* Estilos para la tabla */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 16px;
+        text-align: left;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th {
+        background-color: #f2f2f2;
+        padding: 12px 16px;
+        font-weight: bold;
+        color: #333;
+        border-bottom: 2px solid #ddd;
+    }
+
+    td {
+        padding: 10px 16px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    /* Estilos para el contenedor */
+    .tabcontent {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    h2 {
+        color: #333;
+        border-bottom: 2px solid #e9e9e9;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+     .tab button {
+        background-color: #007bff;
+        color: white;
+        padding: 14px 20px;
+        margin: 0px 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .tab button:hover {
+        background-color: #0056b3;
+    }
+
+    .tab button.active {
+        background-color: #0056b3;
+    }
+</style>
     </head>
     
 
@@ -40,49 +104,49 @@
                     <button class="tablinks" onclick="openTab(event, 'vendedores')">Vendedores</button>
                 </div>
 
-                <div id="propio" class="tabcontent" style="display: block;">
-                    <h2>Propio</h2>
-                    <table>
-                        <tr>
-                            <th>Artículo</th>
-                            <th>Cantidad</th>
-                        </tr>
-                        <?php foreach ($items as $item): ?>
-                            <tr>
-                                <td><?= $item['nombre'] ?></td>
-                                <td><?= $item['cantidad'] ?></td>
-                            </tr>
-                        <?php endforeach ?>
-                    </table>
+                
+<div id="propio" class="tabcontent">
+    <h2>Propio</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Artículo</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($items as $item): ?>
+                <tr>
+                    <td><?= $item['nombre'] ?></td>
+                    <td><?= $item['cantidad'] ?></td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+</div>
+                <div id="vendedores" class="tabcontent" style="display: none;">
+                    <?php foreach ($sellers as $seller): ?>
+    <h2><?= $seller['nombre'] ?></h2>
+    <table>
+        <tr>
+            <th>Articulo</th>
+            <th>Cantidad</th>
+        </tr>
+        <?php 
+            // Llamada a la función getArticles() pasando el ID del vendedor
+            $articles = $categoryController->getArticles($seller['id']); 
+            foreach ($articles as $article): 
+        ?>
+            <tr>
+                <td><?= $article['nombre'] ?></td>
+                <td><?= $article['cantidad'] ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endforeach; ?>
+
                 </div>
 
-                <div id="vendedores" class="tabcontent" style="display: none;">
-                    <h2>Vendedores</h2>
-                    <table>
-                        <tr>
-                            <th>Vendedor 1</th>
-                            <th>Cubo X Cantidad</th>
-                            <th>Cable X Cantidad</th>
-                        </tr>
-                        <tr>
-                            <td>Vendedor 1</td>
-                            <td>10</td>
-                            <td>5</td>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr>
-                            <th>Vendedor 2</th>
-                            <th>Cubo X Cantidad</th>
-                            <th>Cable X Cantidad</th>
-                        </tr>
-                        <tr>
-                            <td>Vendedor 2</td>
-                            <td>20</td>
-                            <td>8</td>
-                        </tr>
-                    </table>
-                </div>
             </div>
         </main>
 

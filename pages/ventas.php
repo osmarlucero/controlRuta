@@ -30,102 +30,99 @@
     <title>Ventas</title>
     <script>
         $(function(){
-          $("#header").load("menu.php"); 
-          $(document).ready(function() {
+            $("#header").load("menu.php"); 
+            $(document).ready(function() {
             $("#mostrarModal").click(function() {
-            $('#reportModal').modal('show');
-           
-          });
-        document.getElementById('generate').addEventListener('click', function() {
-        const dateStart=document.getElementById('startDate').value;
-        const dateEnd=document.getElementById('endDate').value;
-        const productoInput = 15;//document.getElementById('productoInput').value;
-        const xhr = new XMLHttpRequest();
-        const url = '../app/categoryController.php';
-        var user = document.getElementById('responsable').value;
-        console.log(user);
-        const params = 'action=getSellsDate&dateStart='+dateStart+'&dateEnd='+dateEnd+'&userM='+user;
-
-        xhr.open('POST', url, true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-        xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-        const responseData = JSON.parse(xhr.responseText);
-        
-        const dataArray = responseData.map(item => [
-            item.nombre_articulo,
-            item.nombre_tienda,
-            item.cantidad_total
-        ]);
-        
-        console.log(dataArray);
-
-        // Generar el array de ventas en el formato deseado
-        const salesArray = generateSalesArray(responseData);
-        console.log(salesArray);
-        generar(salesArray,"test");
-    }
-};
-
-        xhr.send(params);
-    });
-});
+                $('#reportModal').modal('show');
+            });
+                document.getElementById('generate').addEventListener('click', function() {
+                    const dateStart=document.getElementById('startDate').value;
+                    const dateEnd=document.getElementById('endDate').value;
+                    const productoInput = 15;//document.getElementById('productoInput').value;
+                    const xhr = new XMLHttpRequest();
+                    const url = '../app/categoryController.php';
+                    var user = document.getElementById('responsable').value;
+                    console.log(user);
+                    const params = 'action=getSellsDate&dateStart='+dateStart+'&dateEnd='+dateEnd+'&userM='+user;
+                    xhr.open('POST', url, true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            const responseData = JSON.parse(xhr.responseText);
+                            const dataArray = responseData.map(item => [
+                                item.nombre_articulo,
+                                item.nombre_tienda,
+                                item.cantidad_total
+                            ]);
+                            console.log(dataArray);
+                            // Generar el array de ventas en el formato deseado
+                            const salesArray = generateSalesArray(responseData);
+                            console.log(salesArray);
+                            generar(salesArray,"test");
+                        }
+                    };
+                    xhr.send(params);
+                });
+            });
         });  
     </script> 
     <script type="text/javascript">
         var cant = <?php echo json_encode($cantidades); ?>;
-       function generateSalesArray(responseData) {
-    const uniqueProducts = [...new Set(responseData.map(item => item.nombre_articulo))].sort();
-    const uniqueStores = [...new Set(responseData.map(item => item.nombre_tienda))].sort();
-    
-    const headerRow = ["tienda", ...uniqueProducts, "total"];
-
-    const salesByStoreAndProduct = {};
-    uniqueStores.forEach(store => {
-        salesByStoreAndProduct[store] = {};
-        uniqueProducts.forEach(product => {
-            salesByStoreAndProduct[store][product] = 0;
+    function generateSalesArray(responseData) {
+        const uniqueProducts = [...new Set(responseData.map(item => item.nombre_articulo))].sort();
+        const uniqueStores = [...new Set(responseData.map(item => item.nombre_tienda))].sort();    
+        const headerRow = ["tienda", ...uniqueProducts, "total"];
+        const salesByStoreAndProduct = {};
+        uniqueStores.forEach(store => {
+            salesByStoreAndProduct[store] = {};
+            uniqueProducts.forEach(product => {
+                salesByStoreAndProduct[store][product] = 0;
+            });
         });
-    });
 
-    responseData.forEach(item => {
-        salesByStoreAndProduct[item.nombre_tienda][item.nombre_articulo] = parseInt(item.cantidad_total, 10);
-    });
-
-    const salesArray = [headerRow];
-    const totals = {};
-
-    uniqueProducts.forEach(product => {
-        totals[product] = 0;
-    });
-
-    uniqueStores.forEach(store => {
-        const row = [store];
-        let totalStore = 0;
-        uniqueProducts.forEach(product => {
-            row.push(salesByStoreAndProduct[store][product].toString());
-            totals[product] += salesByStoreAndProduct[store][product];
-            totalStore += salesByStoreAndProduct[store][product];
+        responseData.forEach(item => {
+            salesByStoreAndProduct[item.nombre_tienda][item.nombre_articulo] = parseInt(item.cantidad_total, 10);
         });
-        row.push(totalStore.toString());
-        salesArray.push(row);
-    });
 
-    // Agregar la fila de totales generales al final
-    const totalRow = ["Total"];
-    let grandTotal = 0;
-    uniqueProducts.forEach(product => {
-        totalRow.push(totals[product].toString());
-        grandTotal += totals[product];
-    });
-    totalRow.push(grandTotal.toString());
+        const salesArray = [headerRow];
+        const totals = {};
 
-    salesArray.push(totalRow);
+        uniqueProducts.forEach(product => {
+            totals[product] = 0;
+        });
 
-    return salesArray;
-}
+        uniqueStores.forEach(store => {
+            const row = [store];
+            let totalStore = 0;
+            uniqueProducts.forEach(product => {
+                row.push(salesByStoreAndProduct[store][product].toString());
+                totals[product] += salesByStoreAndProduct[store][product];
+                totalStore += salesByStoreAndProduct[store][product];
+            });
+            row.push(totalStore.toString());
+            salesArray.push(row);
+        });
 
+        // Ordenar filas por ventas totales de mayor a menor
+        salesArray.sort((a, b) => {
+            const totalA = parseInt(a[a.length - 1], 10);
+            const totalB = parseInt(b[b.length - 1], 10);
+            return totalB - totalA;
+        });
+
+        // Agregar la fila de totales generales al final
+        const totalRow = ["Total"];
+        let grandTotal = 0;
+        uniqueProducts.forEach(product => {
+            totalRow.push(totals[product].toString());
+            grandTotal += totals[product];
+        });
+        totalRow.push(grandTotal.toString());
+
+        salesArray.push(totalRow);
+
+        return salesArray;
+    }
 
 
     </script>

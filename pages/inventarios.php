@@ -1,8 +1,8 @@
 <?php
+    include "../app/categoryController.php";
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }
-    include "../app/categoryController.php";
     $categoryController = new categoryController();
     $items = $categoryController->getStocks($_SESSION['id']);
     $users = $categoryController->getUsers();

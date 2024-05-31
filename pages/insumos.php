@@ -20,67 +20,30 @@
         <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
         <meta http-equiv="Pragma" content="no-cache">
         <title>Inventarios</title>
-       <script src="../app/jquery-3.5.1.min.js"></script>
+        <script src="../app/jquery-3.5.1.min.js"></script>
         <script>
             $(function(){
-              $("#header").load("menu.php"); 
+                $("#header").load("menu.php"); 
             });
-        </script> 
-        <script>
-            function mostrarAlerta(id) {
-                // Obtener el radio button seleccionado
-                var radioSeleccionado = document.querySelector('input[name="miCheckbox"]:checked');
 
-                if (radioSeleccionado) {
-                    // Obtener el valor del radio button seleccionado
-                    var valorRadio = radioSeleccionado.value;
-                    // Puedes agregar más lógica aquí según sea necesario
-                }else {
-                    alert("Selecciona un radio button antes de hacer clic en Añadir");
-                }
-                if(id!=valorRadio){                
-                    var cantidad = prompt("Cantidad Que deseas añadir");
-                    // Mostrar la alerta con los datos del formulario
-                    if (id!="12") {
-                        var rute ="id="+id+"&action=updateStock&idDon="+radioSeleccionado+"&cantidad="+cantidad;
-                        $.ajax({
-                            url:"../app/categoryController.php",
-                            type: 'POST',
-                            dataType: 'html',
-                            data: rute,
-                        })
-                        .done(function(respuesta){
-                            //$("#bodyT").html(respuesta);
-                            if(respuesta.length>0){
-                                products= JSON.parse(respuesta);
-                                agregarFilaMethod();
-                            }
-                            else
-                                alert("No hay producto existente con ese codigo")
-                        })
-                        .fail(function(){
-                            console.log("ERROR");
-                        })
-                        .always(function(){
-                            console.log("complete");
-                        });
-                    }else
-                        alert("Ingresa Parametros");
-                    }else
-                        alert("No puedes agregarle a el mismo articulo");
-
+            function mostrarFormulario() {
+                var dialog = document.getElementById("dialogoModificar");
+                dialog.showModal();
             }
-        </script>
+
+            function cerrarFormulario() {
+                var dialog = document.getElementById("dialogoModificar");
+                dialog.close();
+            }
+        </script> 
     </head>
     
-
     <body>
-
         <header id="header"></header>
         <!-- Formulario 1: Usuarios -->
         <main class="container d-flex align-items-center justify-content-center">
             <div class="mainContainer">
-                <p class="">Insumos Existentes</p>
+                <p class="">Insumos Existentes <button onclick="mostrarFormulario()">Modificar</button></p>
                 <ul class="ulMain item-list">
                    <table class="default">
                         <tr>
@@ -88,24 +51,52 @@
                             <td>Estatus</td>
                             <td>Responsable</td>
                             <td>Stock</td>
-                            <td>Opciones</td>
                         </tr>
                         <?php foreach ($insumos as $insumo): ?>
                         <tr>
-                            <td><input type="radio" id="miCheck"value="<?= $insumo['id'] ?>" name="miCheckbox"><?= $insumo['nombre'] ?></td>
+                            <td><?= $insumo['nombre'] ?></td>
                             <td><?= $insumo['estatus'] ?></td>
                             <td><?= $insumo['responsable'] ?></td>
                             <td><?= $insumo['stock'] ?></td>
-                            <td onclick="mostrarAlerta(<?= $insumo['id'] ?>)">Añadir</td>
                         </tr>
                         <?php endforeach ?>
-
                     </table>
-                    <!-- Agrega más elementos del formulario según sea necesario -->
                 </ul>
+                <dialog id="dialogoModificar">
+                    <form>
+                        <div class="mb-3">
+                            <label for="producto" class="form-label">Producto</label>
+                            <select id="producto" class="form-select">
+                                <option value="tipo_c">Tipo C</option>
+                                <option value="cable">Cable</option>
+                                <option value="blister_tipo_c">Blister Tipo C</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidad" class="form-label">Cantidad a mover</label>
+                            <input type="number" class="form-control" id="cantidad">
+                        </div>
+                        <div class="mb-3">
+                            <label for="de" class="form-label">De</label>
+                            <select id="de" class="form-select">
+                                <option value="victor">Victor</option>
+                                <option value="ivan">Ivan</option>
+                                <option value="chinos">Chinos</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="a" class="form-label">A</label>
+                            <select id="a" class="form-select">
+                                <option value="victor">Victor</option>
+                                <option value="ivan">Ivan</option>
+                                <option value="chinos">Chinos</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="cerrarFormulario()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Mover</button>
+                    </form>
+                </dialog>
             </div>
         </main>
-       
-        
     </body>
 </html>

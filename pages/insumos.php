@@ -46,21 +46,99 @@
                 <p class="">Insumos Existentes <button onclick="mostrarFormulario()">Modificar</button></p>
                 <ul class="ulMain item-list">
                    <table class="default">
-                        <tr>
-                            <td>Nombre</td>
-                            <td>Estatus</td>
-                            <td>Responsable</td>
-                            <td>Stock</td>
-                        </tr>
-                        <?php foreach ($insumos as $insumo): ?>
-                        <tr>
-                            <td><?= $insumo['nombre'] ?></td>
-                            <td><?= $insumo['estatus'] ?></td>
-                            <td><?= $insumo['responsable'] ?></td>
-                            <td><?= $insumo['stock'] ?></td>
-                        </tr>
-                        <?php endforeach ?>
-                    </table>
+    <tr>
+        <td></td>
+        <td>Victor</td>
+        <td>Ivan</td>
+        <td>Ivan</td>
+        <td>Manufactura</td>
+    </tr>
+    <tr>
+        <td>Cable Tipo C</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cable V8</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cable iPhone</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cable Tipo C a Tipo C</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cable Tipo C a iPhone</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Audifonos</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cargador de Carro USB</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cargador de Casa USB</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cargador de Carro Tipo C</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cargador de Casa Tipo C</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Exhibidores</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Cargador de casa doble</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
                 </ul>
                 <dialog id="dialogoModificar">
                     <form>

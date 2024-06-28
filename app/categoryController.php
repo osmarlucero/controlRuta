@@ -244,7 +244,7 @@
 		public function getInsumos(){
  			$conn = connect();
 			if ($conn->connect_error==false){			
-				$query = "select * FROM `insumos`";
+				$query = "select * FROM `inventarios`";
 				$prepared_query = $conn->prepare($query);
 				$prepared_query->execute();
 				$results = $prepared_query->get_result();

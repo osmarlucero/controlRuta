@@ -241,10 +241,28 @@
 				echo "error";
 			}
 		}
-		public function getInsumos(){
+		public function getInsumos($case){
  			$conn = connect();
-			if ($conn->connect_error==false){			
-				$query = "select * FROM `inventarios`";
+			if ($conn->connect_error==false){		
+				$query = "SELECT * FROM `inventarios` where producto_id=? ORDER BY FIELD(responsable_id, 20193, 4141, 7676);";
+				$prepared_query = $conn->prepare($query);
+				$prepared_query->bind_param('i',$case);
+				$prepared_query->execute();
+				$results = $prepared_query->get_result();
+				$insumos = $results->fetch_all(MYSQLI_ASSOC);
+				if( count($insumos)>0){
+					return $insumos;
+				}else{
+					return array();				
+				}
+			}else{
+				echo "error";
+			}
+		}
+		public function getProducts(){
+ 			$conn = connect();
+			if ($conn->connect_error==false){		
+				$query = "SELECT * FROM `productos`";
 				$prepared_query = $conn->prepare($query);
 				$prepared_query->execute();
 				$results = $prepared_query->get_result();

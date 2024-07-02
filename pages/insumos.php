@@ -14,7 +14,6 @@
     $insumos11 = $categoryController->getInsumos(12);
     $products = $categoryController->getProducts();
 
-   
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }
@@ -95,13 +94,23 @@
                 $("#header").load("menu.php"); 
             });
 
-            function mostrarFormulario() {
+            function mostrarFormularioModificar() {
                 var dialog = document.getElementById("dialogoModificar");
                 dialog.showModal();
             }
 
-            function cerrarFormulario() {
+            function cerrarFormularioModificar() {
                 var dialog = document.getElementById("dialogoModificar");
+                dialog.close();
+            }
+
+            function mostrarFormularioAgregar() {
+                var dialog = document.getElementById("dialogoAgregar");
+                dialog.showModal();
+            }
+
+            function cerrarFormularioAgregar() {
+                var dialog = document.getElementById("dialogoAgregar");
                 dialog.close();
             }
         </script> 
@@ -112,22 +121,25 @@
         <!-- Formulario 1: Usuarios -->
         <main class="container d-flex align-items-center justify-content-center">
             <div class="mainContainer">
-                <p class="">Insumos Existentes <button class="btn btn-secondary" onclick="mostrarFormulario()">Modificar</button></p>
+                <p class="">Insumos Existentes 
+                    <button class="btn btn-secondary" onclick="mostrarFormularioModificar()">Modificar</button>
+                    <button class="btn btn-secondary" onclick="mostrarFormularioAgregar()">Agregar</button>
+                </p>
                 <ul class="ulMain item-list">
                    <table class="default">
                         <tr>
                             <td></td>
                             <td>Victor</td>
-                            <td>Ivan</td>
-                            <td>Ivan</td>
-                            <td>Manufactura</td>
+                            <td colspan="2">Ivan</td>
+                            <td colspan="2">Manufactura</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>Productos Terminados</td>
                             <td>Blister</td>
-                            <td>Productos Sin Empaque</td>
+                            <td>Sin Empaque</td>
                             <td>En Proceso</td>
+                            <td>Sin Empaque</td>
                         </tr>
                         <tr>
                             <td>Cable Tipo C</td>
@@ -172,7 +184,7 @@
                         <?php endforeach ?>
                         </tr>
                         <tr>
-                            <td>Cargador de Casa USB</td>
+                            <td>Cargador de casa USB Y tipo C</td>
                             <?php foreach ($insumos8 as $insumo): ?>
                             <td><?= $insumo['stock'] ?></td>
                         <?php endforeach ?>
@@ -198,46 +210,81 @@
                     </table>
                 </ul>
                 <dialog id="dialogoModificar">
-                    <form>
+                    <form action="../app/categoryController.php" method="POST">
                         <div class="mb-3">
-                            <label for="producto" class="form-label">Producto</label>
-                            <select id="producto" class="form-select">
+                            <label for="productoModificar" class="form-label">Producto</label>
+                            <select id="productoModificar" class="form-select" name="producto">
                                 <?php foreach ($products as $product): ?>
                                     <option value="<?= $product['id_productos'] ?>"><?= $product['nombre'] ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="estado" class="form-label">Estado</label>
-                            <select id="estado" class="form-select">
-                                    <option value="">Productos Terminados</option>
-                                    <option value="">Blister</option>
-                                    <option value="">Productos Sin Empaque</option>
-                                    <option value="">En Proceso</option>
+                            <label for="estadoModificar" class="form-label">Estado</label>
+                            <select id="estadoModificar" class="form-select" name="estado">
+                                    <option value="Productos Terminados">Productos Terminados</option>
+                                    <option value="Blister">Blister</option>
+                                    <option value="Productos Sin Empaque">Productos Sin Empaque</option>
+                                    <option value="En Proceso">En Proceso</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="cantidad" class="form-label">Cantidad a mover</label>
-                            <input type="number" class="form-control" id="cantidad">
+                            <label for="cantidadModificar" class="form-label">Cantidad a mover</label>
+                            <input type="number" class="form-control" id="cantidadModificar" name="cantidad">
                         </div>
                         <div class="mb-3">
-                            <label for="de" class="form-label">De</label>
-                            <select id="de" class="form-select">
-                                <option value="victor">Victor</option>
-                                <option value="ivan">Ivan</option>
-                                <option value="chinos">Chinos</option>
+                            <label for="deModificar" class="form-label">De</label>
+                            <select id="deModificar" class="form-select" name="de">
+                                <option value="20193">Victor</option>
+                                <option value="4141">Ivan</option>
+                                <option value="7676">Chinos</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="a" class="form-label">A</label>
-                            <select id="a" class="form-select">
-                                <option value="victor">Victor</option>
-                                <option value="ivan">Ivan</option>
-                                <option value="chinos">Chinos</option>
+                            <label for="aModificar" class="form-label">A</label>
+                            <select id="aModificar" class="form-select" name="a">
+                                <option value="20193">Victor</option>
+                                <option value="4141">Ivan</option>
+                                <option value="7676">Chinos</option>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-secondary" onclick="cerrarFormulario()">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" onclick="cerrarFormularioModificar()">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Mover</button>
+                    </form>
+                </dialog>
+                <dialog id="dialogoAgregar">
+                    <form action="../app/categoryController.php" method="POST">
+                        <div class="mb-3">
+                            <label for="productoAgregar" class="form-label">Producto</label>
+                            <select id="productoAgregar" class="form-select" name="producto">
+                                <?php foreach ($products as $product): ?>
+                                    <option value="<?= $product['id_productos'] ?>"><?= $product['nombre'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="estadoAgregar" class="form-label">Estado</label>
+                            <select id="estadoAgregar" class="form-select" name="estado">
+                                    <option value="Productos Terminados">Productos Terminados</option>
+                                    <option value="Blister">Blister</option>
+                                    <option value="Productos Sin Empaque">Productos Sin Empaque</option>
+                                    <option value="En Proceso">En Proceso</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidadAgregar" class="form-label">Cantidad a agregar</label>
+                            <input type="number" class="form-control" id="cantidadAgregar" name="cantidad">
+                        </div>
+                        <div class="mb-3">
+                            <label for="personaAgregar" class="form-label">Persona a agregar</label>
+                            <select id="personaAgregar" class="form-select" name="persona">
+                                <option value="20193">Victor</option>
+                                <option value="4141">Ivan</option>
+                                <option value="7676">Chinos</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="cerrarFormularioAgregar()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
                     </form>
                 </dialog>
             </div>

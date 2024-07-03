@@ -249,6 +249,7 @@
                             </select>
                         </div>
                         <button type="button" class="btn btn-secondary" onclick="cerrarFormularioModificar()">Cancelar</button>
+                        <input type="hidden" name="action" value="modificar">
                         <button type="submit" class="btn btn-primary">Mover</button>
                     </form>
                 </dialog>

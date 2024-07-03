@@ -6,6 +6,14 @@
 	if(isset($_POST['action'])){
 		$CategoryController = new CategoryController();
 		switch ($_POST['action']) {
+			case 'modificar':
+				$producto = strip_tags($_POST['producto']);
+				$estado = strip_tags($_POST['estado']);
+				$cantidad = strip_tags($_POST['cantidad']);
+				$de = strip_tags($_POST['de']);
+				$a = strip_tags($_POST['a']);
+				$CategoryController->modifyStock($producto, $estado, $cantidad,$de,$a);
+			break;
 			case 'storeUser':
 				$id = 1;
 				$nombre = strip_tags($_POST['nombre']);
@@ -71,6 +79,28 @@
 	}
 
 	class CategoryController{
+		public function modifyStock($producto, $estado, $cantidad,$de,$a){
+		    $conn = connect();
+		    if ($conn->connect_error == false) {
+		        $query = "CALL mover_inventario(?, ?, ?, ?, ?, ?)";
+		        $prepared_query = $conn->prepare($query);
+		        $prepared_query->bind_param('iii', $producto,$de, $a,$estado, $cantidad,$_SESSION['id']);
+
+		        if ($prepared_query->execute()) {
+		            // El procedimiento se ejecutó correctamente
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		            $_SESSION['success'] = "Datos enviados correctamente";
+		        } else {
+		            // Error al ejecutar el procedimiento
+		            $_SESSION['error'] = "Error al ejecutar el procedimiento almacenado";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        }
+		    } else {
+		        // Error en la conexión a la base de datos
+		        $_SESSION['error'] = "Conexión Mala BD";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		    }
+		}
 		public function updateStock($id, $idDon, $cantidad) {
 		    $conn = connect();
 		    if ($conn->connect_error == false) {

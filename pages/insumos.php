@@ -284,6 +284,7 @@
                                 <option value="7676">Chinos</option>
                             </select>
                         </div>
+                        <input type="hidden" class="form-control" id="action" name="action" value="subirProducto">
                         <button type="button" class="btn btn-secondary" onclick="cerrarFormularioAgregar()">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Agregar</button>
                     </form>

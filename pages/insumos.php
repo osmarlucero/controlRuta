@@ -130,16 +130,18 @@
                         <tr>
                             <td></td>
                             <td>Victor</td>
-                            <td colspan="2">Ivan</td>
-                            <td colspan="2">Manufactura</td>
+                            <td colspan="3">Ivan</td>
+                            <td colspan="3">Manufactura</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>Productos Terminados</td>
-                            <td>Blister</td>
+                            <td>Blister Negro</td>
                             <td>Sin Empaque</td>
-                            <td>En Proceso</td>
+                            <td>Blister Gris</td>
+                            <td>Blister Negro</td>
                             <td>Sin Empaque</td>
+                            <td>Blister Gris</td>
                         </tr>
                         <tr>
                             <td>Cable Tipo C</td>
@@ -223,7 +225,8 @@
                             <label for="estadoModificar" class="form-label">Estado</label>
                             <select id="estadoModificar" class="form-select" name="estado">
                                     <option value="Productos Terminados">Productos Terminados</option>
-                                    <option value="Blister">Blister</option>
+                                    <option value="Blister Negro">Blister Negro</option>
+                                    <option value="Blister Gris">Blister Gris</option>
                                     <option value="Productos Sin Empaque">Productos Sin Empaque</option>
                                     <option value="En Proceso">En Proceso</option>
                             </select>
@@ -265,9 +268,10 @@
                         </div>
                         <div class="mb-3">
                             <label for="estadoAgregar" class="form-label">Estado</label>
-                            <select id="estadoAgregar" class="form-select" name="estado">
+                            <select id="estadoModificar" class="form-select" name="estado">
                                     <option value="Productos Terminados">Productos Terminados</option>
-                                    <option value="Blister">Blister</option>
+                                    <option value="Blister Negro">Blister Negro</option>
+                                    <option value="Blister Gris">Blister Gris</option>
                                     <option value="Productos Sin Empaque">Productos Sin Empaque</option>
                                     <option value="En Proceso">En Proceso</option>
                             </select>

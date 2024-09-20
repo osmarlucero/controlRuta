@@ -302,7 +302,7 @@
 		public function getInsumos($case){
  			$conn = connect();
 			if ($conn->connect_error==false){		
-				$query = "SELECT * FROM `inventarios` where producto_id=? ORDER BY FIELD(responsable_id, 20193, 4141, 7676);";
+				$query = "SELECT * FROM `inventarios` WHERE producto_id = 1 ORDER BY FIELD(responsable_id, 20193, 4141, 7676), FIELD(estatus, 'terminado', 'Blister negro', 'sin empaque', 'Blister Gris', 'En Transito');";
 				$prepared_query = $conn->prepare($query);
 				$prepared_query->bind_param('i',$case);
 				$prepared_query->execute();

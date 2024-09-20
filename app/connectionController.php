@@ -1,5 +1,6 @@
 <?php
 	define("HOST", "srv901.hstgr.io");
+	//define("HOST", "localhost");
 	define("USER", "u848276287_root");
 	define("PSWD", "Fixcel016_");
 	define("DBNM", "u848276287_system");

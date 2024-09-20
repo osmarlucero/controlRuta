@@ -63,7 +63,7 @@ $date = new DateTime('now', $timezone);
 // Obtener la hora en formato de 24 horas
 $hora = $date->format('Y-m-d H:i:s');
 
-echo "La hora en la zona horaria " . $timezone->getName() . " es: " . $hora;
+//echo "La hora en la zona horaria " . $timezone->getName() . " es: " . $hora;
 ?>
 
                         <!--<a href="Pages/start_page.php?name=Inicio" class="font_style style_login button_style">

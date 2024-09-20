@@ -126,7 +126,7 @@
 </div>
                 <div id="vendedores" class="tabcontent" style="display: none;">
                     <?php foreach ($sellers as $seller): ?>
-    <h2><?= $seller['nombre'] ?></h2> //aqui el boton
+    <h2><?= $seller['nombre'] ?></h2>
     <table>
         <tr>
             <th>Articulo</th>

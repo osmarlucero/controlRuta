@@ -12,6 +12,7 @@
     $insumos9 = $categoryController->getInsumos(9);
     $insumos10 = $categoryController->getInsumos(10);
     $insumos11 = $categoryController->getInsumos(12);
+    $insumos12 = $categoryController->getInsumosEx(11);
     $products = $categoryController->getProducts();
 
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
@@ -119,7 +120,7 @@
     <body>
         <header id="header"></header>
         <!-- Formulario 1: Usuarios -->
-        <main class="container d-flex align-items-center justify-content-center">
+        <main class="container d-flex align-items-center justify-content-center col-10">
             <div class="mainContainer">
                 <p class="">Insumos Existentes 
                     <button class="btn btn-secondary" onclick="mostrarFormularioModificar()">Modificar</button>
@@ -127,22 +128,26 @@
                 </p>
                 <ul class="ulMain item-list">
                    <table class="default">
-                        <tr>
+                        <tr style="font-weight: bold;">
                             <td></td>
-                            <td>Victor</td>
+                            <td colspan="4">Victor</td>
                             <td colspan="4">Ivan</td>
-                            <td colspan="3">Manufactura</td>
+                            <td colspan="4">Manufactura</td>
                         </tr>
                         <tr>
                             <td></td>
+                            <td>Blister Negro</td>
+                            <td>Blister Gris</td>
+                            <td>Sin Empaque</td>
                             <td>Productos Terminados</td>
                             <td>Blister Negro</td>
-                            <td>Sin Empaque</td>
                             <td>Blister Gris</td>
-                            <td>En transito</td>
                             <td>Sin Empaque</td>
+                            <td>En transito</td>
                             <td>Blister Negro</td>
                             <td>Blister Gris</td>
+                            <td>Sin Empaque</td>
+                            <td>Productos Terminados</td>
                         </tr>
                         <tr>
                             <td>Cable Tipo C</td>
@@ -210,6 +215,19 @@
                             <td><?= $insumo['stock'] ?></td>
                         <?php endforeach ?>
                         </tr>
+                        <! -- exhibirod -->
+                        <tr>
+                            <td>Exhibidor</td>
+                            <td colspan="2"></td>
+                            <td><?= $insumos12[0]['stock'] ?></td>
+                            <td><?= $insumos12[1]['stock'] ?></td>
+                            <td colspan="3"></td>
+                            <td><?= $insumos12[2]['stock'] ?></td>
+                            <td colspan="2"></td>
+                            <td><?= $insumos12[3]['stock'] ?></td>
+                            <td><?= $insumos12[4]['stock'] ?></td>
+                        </tr>
+
                     </table>
                 </ul>
                 <dialog id="dialogoModificar">

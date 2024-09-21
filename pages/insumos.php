@@ -13,6 +13,13 @@
     $insumos10 = $categoryController->getInsumos(10);
     $insumos11 = $categoryController->getInsumos(12);
     $insumos12 = $categoryController->getInsumosEx(11);
+
+    $insumos13 = $categoryController->getInsumosEx(13);
+    $insumos14 = $categoryController->getInsumosEx(14);
+    $insumos15 = $categoryController->getInsumosEx(15);
+    $insumos16 = $categoryController->getInsumosEx(16);
+
+
     $products = $categoryController->getProducts();
 
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
@@ -115,6 +122,38 @@
                 dialog.close();
             }
         </script> 
+        <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const personaSelect = document.getElementById('personaAgregar');
+        const estadoSelect = document.getElementById('estadoAgregar');
+        
+        personaSelect.addEventListener('change', function() {
+            const selectedPersona = personaSelect.value;
+
+            // Habilitar todas las opciones por defecto
+            for (let i = 0; i < estadoSelect.options.length; i++) {
+                estadoSelect.options[i].disabled = false;
+            }
+
+            if (selectedPersona === '4141') {
+                // Deshabilitar la opción "terminado" si se selecciona 4141
+                for (let i = 0; i < estadoSelect.options.length; i++) {
+                    if (estadoSelect.options[i].value === 'terminado') {
+                        estadoSelect.options[i].disabled = true;
+                    }
+                }
+            } else if (selectedPersona === '7676') { // 'Chinos' tiene valor 7676
+                // Deshabilitar la opción "En Transito" si se selecciona 'Chinos'
+                for (let i = 0; i < estadoSelect.options.length; i++) {
+                    if (estadoSelect.options[i].value === 'En Transito') {
+                        estadoSelect.options[i].disabled = true;
+                    }
+                }
+            }
+        });
+    });
+</script>
+
     </head>
     
     <body>
@@ -192,7 +231,7 @@
                         <?php endforeach ?>
                         </tr>
                         <tr>
-                            <td>Cargador de casa USB Y tipo C</td>
+                            <td>Cargador de casa USB</td>
                             <?php foreach ($insumos8 as $insumo): ?>
                             <td><?= $insumo['stock'] ?></td>
                         <?php endforeach ?>
@@ -215,7 +254,7 @@
                             <td><?= $insumo['stock'] ?></td>
                         <?php endforeach ?>
                         </tr>
-                        <! -- exhibirod -->
+                        <! -- especiales -->
                         <tr>
                             <td>Exhibidor</td>
                             <td colspan="2"></td>
@@ -227,6 +266,41 @@
                             <td><?= $insumos12[3]['stock'] ?></td>
                             <td><?= $insumos12[4]['stock'] ?></td>
                         </tr>
+                        <tr>
+                            <td>Chip Telcel</td>
+                            <td colspan="3"></td>
+                            <td><?= $insumos13[0]['stock'] ?></td>
+                            <td colspan="3"></td>
+                            <td><?= $insumos13[1]['stock'] ?></td>
+                            <td colspan="4"></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Chip Unefon</td>
+                            <td colspan="3"></td>
+                            <td><?= $insumos13[0]['stock'] ?></td>
+                            <td colspan="3"></td>
+                            <td><?= $insumos13[1]['stock'] ?></td>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td>Chip ATT</td>
+                            <td colspan="3"></td>
+                            <td><?= $insumos13[0]['stock'] ?></td>
+                            <td colspan="3"></td>
+                            <td><?= $insumos13[1]['stock'] ?></td>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td>Pestañas</td>
+                            <td colspan="2"></td>
+                            <td><?= $insumos16[0]['stock'] ?></td>
+                            <td><?= $insumos16[1]['stock'] ?></td>
+                            <td colspan="3"></td>
+                            <td><?= $insumos16[2]['stock'] ?></td>
+                            <td colspan="4"></td>
+                        </tr>
+                        
 
                     </table>
                 </ul>
@@ -247,7 +321,7 @@
                                     <option value="Blister negro">Blister Negro</option>
                                     <option value="Blister Gris">Blister Gris</option>
                                     <option value="sin Empaque">Productos Sin Empaque</option>
-                                    <option value="manufactura">En Proceso</option>
+                                    <option value="En Transito">En Transito</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -286,26 +360,26 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="estadoAgregar" class="form-label">Estado</label>
-                            <select id="estadoAgregar" class="form-select" name="estado">
-                                    <option value="terminado">Productos Terminados</option>
-                                    <option value="Blister negro">Blister Negro</option>
-                                    <option value="Blister Gris">Blister Gris</option>
-                                    <option value="sin Empaque">Productos Sin Empaque</option>
-                                    <option value="manufactura">En Proceso</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="cantidadAgregar" class="form-label">Cantidad a agregar</label>
-                            <input type="number" class="form-control" id="cantidadAgregar" name="cantidad">
-                        </div>
-                        <div class="mb-3">
                             <label for="personaAgregar" class="form-label">Persona a agregar</label>
                             <select id="personaAgregar" class="form-select" name="persona">
                                 <option value="20193">Victor</option>
                                 <option value="4141">Ivan</option>
                                 <option value="7676">Chinos</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="estadoAgregar" class="form-label">Estado</label>
+                            <select id="estadoAgregar" class="form-select" name="estado">
+                                    <option value="terminado">Productos Terminados</option>
+                                    <option value="Blister negro">Blister Negro</option>
+                                    <option value="Blister Gris">Blister Gris</option>
+                                    <option value="sin Empaque">Productos Sin Empaque</option>
+                                    <option value="En Transito">En Transito</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidadAgregar" class="form-label">Cantidad a agregar</label>
+                            <input type="number" class="form-control" id="cantidadAgregar" name="cantidad">
                         </div>
                         <input type="hidden" class="form-control" id="action" name="action" value="subirProducto">
                         <button type="button" class="btn btn-secondary" onclick="cerrarFormularioAgregar()">Cancelar</button>

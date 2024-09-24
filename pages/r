@@ -1,0 +1,20 @@
+
+DELIMITER $$
+CREATE PROCEDURE `mover_inventario_entre_si` 
+(IN `id_producto` INT, IN `id_responsable_quita` INT, IN `id_responsable_recibe` INT, 
+IN `estatus_quita` VARCHAR(25), IN `estatus_recibe` VARCHAR(25), IN `cantidad` INT, IN `id_manejador` INT)  
+BEGIN
+    -- Restar la cantidad del inventario del responsable que quita con su estatus específico
+    UPDATE inventarios
+    SET stock = stock - cantidad
+    WHERE producto_id = id_producto AND responsable_id = id_responsable_quita AND estatus = estatus_quita;
+
+    -- Sumar la cantidad al inventario del responsable receptor con su estatus específico
+    UPDATE inventarios
+    SET stock = stock + cantidad
+    WHERE producto_id = id_producto AND responsable_id = id_responsable_recibe AND estatus = estatus_recibe;
+
+    -- Insertar el movimiento en la tabla movimientos
+    INSERT INTO movimientos (id_quitado, id_receptor, id_manejador, cantidad, tipo)
+    VALUES (id_responsable_quita, id_responsable_recibe, id_manejador, cantidad, CONCAT(estatus_quita, ' a ', estatus_recibe));
+END;

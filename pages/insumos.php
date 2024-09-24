@@ -117,6 +117,16 @@
                 dialog.showModal();
             }
 
+            function mostrarFormularioTraspaso() {
+                var dialog = document.getElementById("dialogoTraspaso");
+                dialog.showModal();
+            }
+
+            function cerrarFormularioTraspaso() {
+                var dialog = document.getElementById("dialogoTraspaso");
+                dialog.close();
+            }
+
             function cerrarFormularioAgregar() {
                 var dialog = document.getElementById("dialogoAgregar");
                 dialog.close();
@@ -163,6 +173,7 @@
             <div class="mainContainer">
                 <p class="">Insumos Existentes 
                     <button class="btn btn-secondary" onclick="mostrarFormularioModificar()">Modificar</button>
+                    <button class="btn btn-secondary" onclick="mostrarFormularioTraspaso()">Traspaso Interno</button>
                     <button class="btn btn-secondary" onclick="mostrarFormularioAgregar()">Agregar</button>
                 </p>
                 <ul class="ulMain item-list">
@@ -386,6 +397,72 @@
                         <button type="submit" class="btn btn-primary">Agregar</button>
                     </form>
                 </dialog>
+
+                <dialog id="dialogoTraspaso">
+                    <form action="../app/categoryController.php" method="POST">
+                        <div class="mb-3">
+                            <label for="productoModificar" class="form-label">Producto</label>
+                            <select id="productoModificar" class="form-select" name="producto">
+                                <?php foreach ($products as $product): ?>
+                                    <option value="<?= $product['id_productos'] ?>"><?= $product['nombre'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        
+                        <!-- Primer selector de estado -->
+                        <div class="mb-3">
+                            <label for="estadoModificar1" class="form-label">Estado Inicial</label>
+                            <select id="estadoModificar1" class="form-select" name="estado_inicial">
+                                <option value="terminado">Productos Terminados</option>
+                                <option value="Blister negro">Blister Negro</option>
+                                <option value="Blister Gris">Blister Gris</option>
+                                <option value="sin Empaque">Productos Sin Empaque</option>
+                                <option value="En Transito">En Transito</option>
+                            </select>
+                        </div>
+
+                        <!-- Segundo selector de estado -->
+                        <div class="mb-3">
+                            <label for="estadoModificar2" class="form-label">Estado Final</label>
+                            <select id="estadoModificar2" class="form-select" name="estado_final">
+                                <option value="terminado">Productos Terminados</option>
+                                <option value="Blister negro">Blister Negro</option>
+                                <option value="Blister Gris">Blister Gris</option>
+                                <option value="sin Empaque">Productos Sin Empaque</option>
+                                <option value="En Transito">En Transito</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cantidadModificar" class="form-label">Cantidad a mover</label>
+                            <input type="number" class="form-control" id="cantidadModificar" name="cantidad">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="deModificar" class="form-label">De</label>
+                            <select id="deModificar" class="form-select" name="de">
+                                <option value="20193">Victor</option>
+                                <option value="4141">Ivan</option>
+                                <option value="7676">Chinos</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="aModificar" class="form-label">A</label>
+                            <select id="aModificar" class="form-select" name="a">
+                                <option value="20193">Victor</option>
+                                <option value="4141">Ivan</option>
+                                <option value="7676">Chinos</option>
+                            </select>
+                        </div>
+                        
+                        <button type="button" class="btn btn-secondary" onclick="cerrarFormularioModificar()">Cancelar</button>
+                        <input type="hidden" name="action" value="modificar">
+                        <button type="submit" class="btn btn-primary">Mover</button>
+                    </form>
+            </dialog>
+
+
             </div>
         </main>
     </body>

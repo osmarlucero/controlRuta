@@ -111,6 +111,10 @@
                 var dialog = document.getElementById("dialogoModificar");
                 dialog.close();
             }
+            function cerrarFormularioModificarEntreSi() {
+                var dialog = document.getElementById("dialogoTraspaso");
+                dialog.close();
+            }
 
             function mostrarFormularioAgregar() {
                 var dialog = document.getElementById("dialogoAgregar");
@@ -394,7 +398,7 @@
                         </div>
                         <input type="hidden" class="form-control" id="action" name="action" value="subirProducto">
                         <button type="button" class="btn btn-secondary" onclick="cerrarFormularioAgregar()">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Agregar</button>
+                        <button type="button"onclick="cerrarFormularioAgregar()" class="btn btn-primary">Agregar</button>
                     </form>
                 </dialog>
 
@@ -456,8 +460,8 @@
                             </select>
                         </div>
                         
-                        <button type="button" class="btn btn-secondary" onclick="cerrarFormularioModificar()">Cancelar</button>
-                        <input type="hidden" name="action" value="modificar">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarFormularioModificarEntreSi()">Cancelar</button>
+                        <input type="hidden" name="action" value="modificarEntreSi">
                         <button type="submit" class="btn btn-primary">Mover</button>
                     </form>
             </dialog>

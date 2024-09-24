@@ -13,6 +13,17 @@
 				$persona = strip_tags($_POST['persona']);
 				$CategoryController->subirProducto($producto, $estado, $cantidad,$persona);
 			break;
+			case 'modificarEntreSi':
+			    $producto = strip_tags($_POST['producto']);
+			    $estado_inicial = strip_tags($_POST['estado_inicial']); // Se recoge el estado inicial
+			    $estado_final = strip_tags($_POST['estado_final']); // Se recoge el estado final
+			    $cantidad = strip_tags($_POST['cantidad']);
+			    $de = strip_tags($_POST['de']);
+			    $a = strip_tags($_POST['a']);		    
+			    // Llamada al método modifyStock para modificar entre estados
+			    $CategoryController->modifyStockBt($producto, $estado_inicial, $cantidad, $de, $a, $estado_final);
+		    break;
+
 			case 'modificar':
 				$producto = strip_tags($_POST['producto']);
 				$estado = strip_tags($_POST['estado']);
@@ -86,6 +97,34 @@
 	}
 
 	class CategoryController{
+		public function modifyStockBt($producto, $estado_inicial, $cantidad, $de, $a, $estado_final){
+		    $conn = connect();
+		    if ($conn->connect_error == false) {
+		        // Ajustamos la consulta para que llame al procedimiento correcto
+		        $query = "CALL mover_inventario_entre_si(?, ?, ?, ?, ?, ?, ?)";
+		        $prepared_query = $conn->prepare($query);
+		        
+		        // Ajustamos los parámetros para coincidir con el procedimiento
+		        // 'iiissii' corresponde a los tipos: INT, INT, INT, VARCHAR(25), VARCHAR(25), INT, INT
+		        $prepared_query->bind_param('iiissii', $producto, $de, $a, $estado_inicial, $estado_final, $cantidad, $_SESSION['id']);
+		        
+		        if ($prepared_query->execute()) {
+		            // El procedimiento se ejecutó correctamente
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		            $_SESSION['success'] = "Datos enviados correctamente";
+		        } else {
+		            // Error al ejecutar el procedimiento
+		            $_SESSION['error'] = "Error al ejecutar el procedimiento almacenado";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        }
+		    } else {
+		        // Error en la conexión a la base de datos
+		        $_SESSION['error'] = "Conexión Mala BD";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		    }
+		}
+
+
 		public function subirProducto($producto, $estado, $cantidad,$persona){
 		    $conn = connect();
 		    if ($conn->connect_error == false) {

@@ -97,6 +97,30 @@
 	}
 
 	class CategoryController{
+		public function getTerminated(){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){		
+					$id=$_SESSION['id'];
+					if($id!=20191)
+						$query = "SELECT i.producto_id AS id, i.stock AS cantidad, a.nombre FROM inventarios AS i JOIN articulos AS a ON i.producto_id = a.idArticulo WHERE i.responsable_id = ".$id." AND i.estatus = 'terminado'";
+					else
+						$query = "SELECT * FROM inventariovendedor where id_vendedor=".$id;
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
 		public function modifyStockBt($producto, $estado_inicial, $cantidad, $de, $a, $estado_final){
 		    $conn = connect();
 		    if ($conn->connect_error == false) {

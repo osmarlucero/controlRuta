@@ -398,7 +398,7 @@
                         </div>
                         <input type="hidden" class="form-control" id="action" name="action" value="subirProducto">
                         <button type="button" class="btn btn-secondary" onclick="cerrarFormularioAgregar()">Cancelar</button>
-                        <button type="button"onclick="cerrarFormularioAgregar()" class="btn btn-primary">Agregar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
                     </form>
                 </dialog>
 

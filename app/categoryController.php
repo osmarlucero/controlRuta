@@ -103,7 +103,7 @@
 				if ($conn->connect_error==false){		
 					$id=$_SESSION['id'];
 					if($id!=20191)
-						$query = "SELECT i.producto_id AS id, i.stock AS cantidad, a.nombre FROM inventarios AS i JOIN articulos AS a ON i.producto_id = a.idArticulo WHERE i.responsable_id = ".$id." AND i.estatus = 'terminado'";
+						$query = "SELECT i.producto_id AS id, i.stock AS cantidad, a.nombre FROM inventarios AS i JOIN articulos AS a ON i.producto_id = a.idArticulo WHERE i.responsable_id = ".$id." AND i.estatus = 'terminado'  AND i.stock!=0";
 					else
 						$query = "SELECT * FROM inventariovendedor where id_vendedor=".$id;
 					$prepared_query = $conn->prepare($query);

@@ -185,7 +185,7 @@ $manager = $categoryController->getTerminated();
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="/addArticle.php" method="POST">
+                            <form action="../app/categoryController.php" method="POST">
                                     <div class="form-group">
                                         <label for="article"><b>Artículo</b></label>
                                         <select name="article" class="form-control" required>
@@ -200,8 +200,11 @@ $manager = $categoryController->getTerminated();
                                         <input type="number" class="form-control" placeholder="Ingrese cantidad" name="cantidad" required>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Añadir</button>
+                                        <input type="hidden" class="form-control" value="<?= $seller['id'] ?>" name="id">
+                                        <input type="hidden" class="form-control" value="traspasoStock" name="action">
+
                                         <button type="button" class="btn btn-secondary" onclick="closeForm('form-<?= $seller['id'] ?>')">Cerrar</button>
+                                        <button type="submit" class="btn btn-primary">Añadir</button>
                                     </div>
                                 </form>
                             </div>

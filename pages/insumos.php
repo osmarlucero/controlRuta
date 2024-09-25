@@ -311,8 +311,9 @@
                             <td colspan="2"></td>
                             <td><?= $insumos16[0]['stock'] ?></td>
                             <td><?= $insumos16[1]['stock'] ?></td>
-                            <td colspan="3"></td>
+                            <td colspan="2"></td>
                             <td><?= $insumos16[2]['stock'] ?></td>
+                            <td><?= $insumos16[3]['stock'] ?></td>
                             <td colspan="4"></td>
                         </tr>
                         
@@ -335,7 +336,7 @@
                                     <option value="terminado">Productos Terminados</option>
                                     <option value="Blister negro">Blister Negro</option>
                                     <option value="Blister Gris">Blister Gris</option>
-                                    <option value="sin Empaque">Productos Sin Empaque</option>
+                                    <option value="sin empaque">Productos Sin Empaque</option>
                                     <option value="En Transito">En Transito</option>
                             </select>
                         </div>
@@ -388,7 +389,7 @@
                                     <option value="terminado">Productos Terminados</option>
                                     <option value="Blister negro">Blister Negro</option>
                                     <option value="Blister Gris">Blister Gris</option>
-                                    <option value="sin Empaque">Productos Sin Empaque</option>
+                                    <option value="sin empaque">Productos Sin Empaque</option>
                                     <option value="En Transito">En Transito</option>
                             </select>
                         </div>
@@ -420,7 +421,7 @@
                                 <option value="terminado">Productos Terminados</option>
                                 <option value="Blister negro">Blister Negro</option>
                                 <option value="Blister Gris">Blister Gris</option>
-                                <option value="sin Empaque">Productos Sin Empaque</option>
+                                <option value="sin empaque">Productos Sin Empaque</option>
                                 <option value="En Transito">En Transito</option>
                             </select>
                         </div>
@@ -432,7 +433,7 @@
                                 <option value="terminado">Productos Terminados</option>
                                 <option value="Blister negro">Blister Negro</option>
                                 <option value="Blister Gris">Blister Gris</option>
-                                <option value="sin Empaque">Productos Sin Empaque</option>
+                                <option value="sin empaque">Productos Sin Empaque</option>
                                 <option value="En Transito">En Transito</option>
                             </select>
                         </div>

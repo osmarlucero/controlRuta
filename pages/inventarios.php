@@ -202,7 +202,6 @@ $manager = $categoryController->getTerminated();
                                     <div class="modal-footer">
                                         <input type="hidden" class="form-control" value="<?= $seller['id'] ?>" name="id">
                                         <input type="hidden" class="form-control" value="traspasoStock" name="action">
-
                                         <button type="button" class="btn btn-secondary" onclick="closeForm('form-<?= $seller['id'] ?>')">Cerrar</button>
                                         <button type="submit" class="btn btn-primary">Añadir</button>
                                     </div>

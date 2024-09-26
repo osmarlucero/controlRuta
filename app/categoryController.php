@@ -93,10 +93,50 @@
 				$userM = strip_tags($_POST['userM']);
 				$CategoryController->getVentasDate($dateStart,$dateEnd,$userM);
 			break;
+			case 'traspasoStock':
+			    $producto = strip_tags($_POST['article']);
+			    $cantidad = strip_tags($_POST['cantidad']);
+			    $de = $_SESSION['id'];
+			    $a = strip_tags($_POST['id']);		    
+			    // Llamada al método modifyStock para modificar entre estados
+			    $CategoryController->modifyStockSeller($producto, $cantidad, $de, $a);
+		    break;
 		}
 	}
 
 	class CategoryController{
+		public function modifyStockSeller($producto, $cantidad, $de, $a){
+		    $conn = connect();
+		    if ($conn->connect_error == false) {
+		        // Ajustamos la consulta para que llame al procedimiento correcto
+		        $id=$_SESSION['id'];
+				if($id!=20191)
+		        	$query = "call transferir_producto(?,?,?,?);";
+		        else{
+		        	$query = "call transferir_producto_vendedor(?,?,?,?);";
+		        	echo"err";
+		        }
+		       	$prepared_query = $conn->prepare($query);
+		        
+		        // Ajustamos los parámetros para coincidir con el procedimiento
+		        // 'iiissii' corresponde a los tipos: INT, INT, INT, VARCHAR(25), VARCHAR(25), INT, INT
+		        $prepared_query->bind_param('iiii', $producto, $cantidad, $de, $a);
+		        
+		        if ($prepared_query->execute()) {
+		            // El procedimiento se ejecutó correctamente
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		            $_SESSION['success'] = "Datos enviados correctamente";
+		        } else {
+		            // Error al ejecutar el procedimiento
+		            $_SESSION['error'] = "Error al ejecutar el procedimiento almacenado";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        }
+		    } else {
+		        // Error en la conexión a la base de datos
+		        $_SESSION['error'] = "Conexión Mala BD";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		    }
+		}
 		public function getTerminated(){
 			if(true){
 	 			$conn = connect();
@@ -105,7 +145,7 @@
 					if($id!=20191)
 						$query = "SELECT i.producto_id AS id, i.stock AS cantidad, a.nombre FROM inventarios AS i JOIN articulos AS a ON i.producto_id = a.idArticulo WHERE i.responsable_id = ".$id." AND i.estatus = 'terminado'  AND i.stock!=0";
 					else
-						$query = "SELECT * FROM inventariovendedor where id_vendedor=".$id;
+						$query = "SELECT id_vendedor,nombre,cantidad, id_articulo as id FROM inventariovendedor where id_vendedor=".$id;
 					$prepared_query = $conn->prepare($query);
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
@@ -705,8 +745,12 @@
 		public function getStocks($id){
 			if(true){
 	 			$conn = connect();
-				if ($conn->connect_error==false){			
-					$query = "select * FROM `inventariovendedor` where id_vendedor=".$id;
+				if ($conn->connect_error==false){	
+					$id=$_SESSION['id'];
+					if($id==20193)	
+						$query = "SELECT i.producto_id AS id, i.stock AS cantidad, a.nombre FROM inventarios AS i JOIN articulos AS a ON i.producto_id = a.idArticulo WHERE i.responsable_id = ".$id." AND i.estatus = 'terminado'  AND i.stock!=0";
+					else
+						$query = "select * FROM `inventariovendedor` where id_vendedor=".$id;
 					$prepared_query = $conn->prepare($query);
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();

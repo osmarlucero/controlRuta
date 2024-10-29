@@ -2,6 +2,7 @@
     include "../app/categoryController.php";
     $categoryController = new categoryController();
     $users = $categoryController->getStoresInfo($_GET['id']);
+    $sells = $categoryController->getStockPieces($_GET['id']);
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }
@@ -114,11 +115,6 @@
                     <table class="table table-bordered table-striped" style="background-color: white;">
                         <?php foreach ($users as $user): ?>
                             <tr>
-                                <th style="width: 30%;">ID</th>
-                                <td style="width: 70%;"><?= $user['id_tienda'] ?></td>
-                                <input type="hidden" name="id" value="<?= $user['id_tienda'] ?>">
-                            </tr>
-                            <tr>
                                 <th>Nombre</th>
                                 <td><input type="text" name="nombre" value="<?= $user['nombre'] ?>"></td>
                             </tr>
@@ -162,6 +158,38 @@
                                 <th>Codigo</th>
                                 <td><canvas id="barcode" onclick="printl();"></canvas></td>
                             </tr>
+                            <tr>
+                                 <th colspan="2" class="text-center">Inventario Inicial</th>
+                            </tr>
+                            <tr>
+    <th colspan="2" class="text-center">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                $total = 0; // Inicializamos la variable para el total
+                foreach ($sells as $sell): 
+                    $total += $sell['cantidad_piezas']; // Sumar la cantidad de cada producto al total
+                ?>
+                <tr>
+                    <td><?= $sell['nombre'] ?></td>
+                    <td><?= $sell['cantidad_piezas'] ?></td>
+                </tr>
+                <?php endforeach ?>
+                <tr>
+                    <td>Total</td>
+                    <td><?= $total ?></td> <!-- Mostramos el total al final -->
+                </tr>
+            </tbody>
+        </table>
+    </th>
+</tr>
+
                             <tr>
                                  <th colspan="2" class="text-center">Imagen Tienda</th>
                             </tr>

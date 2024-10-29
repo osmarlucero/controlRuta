@@ -105,6 +105,26 @@
 	}
 
 	class CategoryController{
+		public function getStockPieces($id){
+			if(true){
+	 			$conn = connect();
+				if ($conn->connect_error==false){		
+					$query = "SELECT a.nombre, c.cantidad_piezas FROM consigna c JOIN articulos a ON c.id_articulo = a.idArticulo WHERE c.cliente_id =".$id;
+					$prepared_query = $conn->prepare($query);
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
 		public function modifyStockSeller($producto, $cantidad, $de, $a){
 		    $conn = connect();
 		    if ($conn->connect_error == false) {

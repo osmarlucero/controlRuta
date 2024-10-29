@@ -78,8 +78,9 @@
 				$telefono = strip_tags($_POST['telefono']);
 				$vendedor = strip_tags($_POST['vendedor']);
 				$precio = strip_tags($_POST['precio']);
-
-				$CategoryController->updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio);
+				$lat = strip_tags($_POST['lat']);
+				$lng = strip_tags($_POST['lng']);
+				$CategoryController->updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng);
 
 			break;
 			case 'updateFact':
@@ -296,26 +297,26 @@
 		        header("Location:" . $_SERVER["HTTP_REFERER"]);
 		    }
 		}
-		public function updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio) {
+		public function updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng) {
 		    $conn = connect();
 		    if ($conn->connect_error == false) {
-		        $query = "UPDATE tienda SET nombre = ?, nombre_responsable = ?, direccion = ?, correo = ?, RFC = ?, telefono = ?, vendedor = ?, precio = ?
+		        $query = "UPDATE tienda SET nombre = ?, nombre_responsable = ?, direccion = ?, correo = ?, RFC = ?, telefono = ?, vendedor = ?, precio = ?, lat = ?, lng = ?
 		         WHERE id_tienda = ?";
 		        $prepared_query = $conn->prepare($query);
-		        $prepared_query->bind_param('ssssssiii',$nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$id_tienda);
+		        $prepared_query->bind_param('ssssssiissi',$nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng,$id_tienda);
 
 		        if ($prepared_query->execute()) {
 		            // El procedimiento se ejecutó correctamente
 		            header("Location:" . $_SERVER["HTTP_REFERER"]);
-		            $_SESSION['success'] = "Datos enviados correctamente";
+		            $_SESSION['info'] = "Datos enviados correctamente";
 		        } else {
 		            // Error al ejecutar el procedimiento
-		            $_SESSION['error'] = "Error al ejecutar el procedimiento almacenado";
+		            $_SESSION['info'] = "Error al ejecutar el procedimiento almacenado";
 		            header("Location:" . $_SERVER["HTTP_REFERER"]);
 		        }
 		    } else {
 		        // Error en la conexión a la base de datos
-		        $_SESSION['error'] = "Conexión Mala BD";
+		        $_SESSION['info'] = "Conexión Mala BD";
 		        header("Location:" . $_SERVER["HTTP_REFERER"]);
 		    }
 		}

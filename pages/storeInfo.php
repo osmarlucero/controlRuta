@@ -3,9 +3,11 @@
     $categoryController = new categoryController();
     $users = $categoryController->getStoresInfo($_GET['id']);
     $sells = $categoryController->getStockPieces($_GET['id']);
+    $subUs = $categoryController->getUsersControl($_SESSION['id']);
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }
+    //echo $_SESSION['info'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -38,32 +40,59 @@
         };
 
         function initMap() {
-            var locations = <?php echo json_encode($users); ?>;
-            if (locations.length > 0) {
-                var initialLocation = {lat: parseFloat(locations[0].lat), lng: parseFloat(locations[0].lng)};
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    center: initialLocation,
-                    zoom: 15
-                });
+    var locations = <?php echo json_encode($users); ?>;
+    var lat = parseFloat(locations[0]?.lat);
+    var lng = parseFloat(locations[0]?.lng);
 
-                var marker = new google.maps.Marker({
-                    position: initialLocation,
-                    map: map,
-                    title: 'Ubicación',
-                    draggable: true 
-                });
+    // Función para crear el mapa y marcador en una ubicación específica
+    function setupMap(location) {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: location,
+            zoom: 15
+        });
 
-                document.getElementById('lat').value = initialLocation.lat;
-                document.getElementById('lng').value = initialLocation.lng;
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: 'Ubicación',
+            draggable: true 
+        });
 
-                google.maps.event.addListener(marker, 'dragend', function() {
-                    var lat = marker.getPosition().lat();
-                    var lng = marker.getPosition().lng();
-                    document.getElementById('lat').value = lat;
-                    document.getElementById('lng').value = lng;
-                });
-            }
+        document.getElementById('lat').value = location.lat;
+        document.getElementById('lng').value = location.lng;
+
+        google.maps.event.addListener(marker, 'dragend', function() {
+            var lat = marker.getPosition().lat();
+            var lng = marker.getPosition().lng();
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+        });
+    }
+
+    // Verificar si las coordenadas son válidas; si no, obtener la ubicación actual del dispositivo
+    if (!isNaN(lat) && !isNaN(lng)) {
+        setupMap({lat: lat, lng: lng});
+    } else {
+        console.error("Coordenadas inválidas: lat o lng es NaN.");
+        alert("Error: Coordenadas inválidas. Usando ubicación actual del dispositivo.");
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var currentLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                setupMap(currentLocation);
+            }, function(error) {
+                alert("No se pudo obtener la ubicación actual: " + error.message);
+            });
+        } else {
+            alert("Geolocalización no soportada por este navegador.");
         }
+    }
+}
+
+
 
         function printl(){
             var sub = <?php echo json_encode($users); ?>;
@@ -102,7 +131,18 @@
                         <tr><th>Teléfono</th><td><input type="text" name="telefono" value="<?= $user['telefono'] ?>"></td></tr>
                         <tr><th>Fecha Creación</th><td><?= $user['fecha_creacion'] ?></td></tr>
                         <tr><th>Fecha Última Visita</th><td><?= $user['fecha_ultima_visita'] ?></td></tr>
-                        <tr><th>Vendedor</th><td><input type="text" name="vendedor" value="<?= $user['vendedor'] ?>"></td></tr>
+                        <tr>
+                            <th>Vendedor</th>
+                            <td>
+                                <select name="vendedor">
+                                    <?php foreach ($subUs as $subU): ?>
+                                        <option value="<?= htmlspecialchars($subU['id']) ?>">
+                                            <?= htmlspecialchars($subU['id'] . ' - ' . $subU['nombre']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                        </tr>
                         <tr><th>Precio</th><td><input type="text" name="precio" value="<?= $user['precio'] ?>"></td></tr>
                         <tr><th>Codigo</th><td><canvas id="barcode" onclick="printl();"></canvas></td></tr>
                         <tr><th colspan="2" class="text-center">Inventario Inicial</th></tr>

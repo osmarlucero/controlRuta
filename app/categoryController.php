@@ -106,6 +106,24 @@
 	}
 
 	class CategoryController{
+		public function getUsersControl($id){
+ 			$conn = connect();
+			if ($conn->connect_error==false){		
+				$query = "SELECT * FROM `users` WHERE encargado = ?";
+				$prepared_query = $conn->prepare($query);
+				$prepared_query->bind_param('i',$id);
+				$prepared_query->execute();
+				$results = $prepared_query->get_result();
+				$insumos = $results->fetch_all(MYSQLI_ASSOC);
+				if( count($insumos)>0){
+					return $insumos;
+				}else{
+					return array();				
+				}
+			}else{
+				echo "error";
+			}
+		}
 		public function getStockPieces($id){
 			if(true){
 	 			$conn = connect();

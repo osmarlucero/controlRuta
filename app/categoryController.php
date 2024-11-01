@@ -97,10 +97,11 @@
 			case 'traspasoStock':
 			    $producto = strip_tags($_POST['article']);
 			    $cantidad = strip_tags($_POST['cantidad']);
+			    $tipo = strip_tags($_POST['tipo']);
 			    $de = $_SESSION['id'];
 			    $a = strip_tags($_POST['id']);		    
 			    // Llamada al método modifyStock para modificar entre estados
-			    $CategoryController->modifyStockSeller($producto, $cantidad, $de, $a);
+			    $CategoryController->modifyStockSeller($producto, $cantidad, $de, $a,$tipo);
 		    break;
 		}
 	}
@@ -144,8 +145,9 @@
 			}else
 				return array();
 		}
-		public function modifyStockSeller($producto, $cantidad, $de, $a){
-		    $conn = connect();
+		public function modifyStockSeller($producto, $cantidad, $de, $a, $tipo){
+		    echo $tipo;
+		    /*$conn = connect();
 		    if ($conn->connect_error == false) {
 		        // Ajustamos la consulta para que llame al procedimiento correcto
 		        $id=$_SESSION['id'];
@@ -174,7 +176,7 @@
 		        // Error en la conexión a la base de datos
 		        $_SESSION['error'] = "Conexión Mala BD";
 		        header("Location:" . $_SERVER["HTTP_REFERER"]);
-		    }
+		    } */
 		}
 		public function getTerminated(){
 			if(true){

@@ -162,7 +162,7 @@ $manager = $categoryController->getTerminated();
                                     </div>
                                     <input type="hidden" id="tipo"  name="tipo">
                                     <input type="hidden" class="form-control" value="<?= $seller['id'] ?>" name="id">
-                                    <input type="hidden" class="form-control" value="regresarStock" name="action">
+                                    <input type="hidden" class="form-control" value="traspasoStock" name="action">
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" onclick="closeForm('return-form-<?= $seller['id'] ?>')">Cerrar</button>
                                         <button type="submit" class="btn btn-primary">Regresar</button>

@@ -76,8 +76,8 @@ $manager = $categoryController->getTerminated();
         <div id="vendedores" class="tabcontent">
             <?php foreach ($sellers as $seller): ?>
                 <h2><?= $seller['nombre'] ?> <?= $seller['id'] ?>
-                    <button class="btn btn-primary btn-sm" onclick="openForm('form-<?= $seller['id'] ?>')">Añadir</button>
-                    <button class="btn btn-secondary btn-sm" onclick="openForm('return-form-<?= $seller['id'] ?>')">Regresar Inventario</button>
+                    <button class="btn btn-primary btn-sm" onclick="openForm('form-<?= $seller['id'] ?>', 'normal')">Añadir</button>
+                    <button class="btn btn-secondary btn-sm" onclick="openForm('return-form-<?= $seller['id'] ?>', 'retorno')">Regresar Inventario</button>
                 </h2>
                 <table>
                     <thead>
@@ -123,7 +123,7 @@ $manager = $categoryController->getTerminated();
                                         <label for="cantidad"><b>Cantidad</b></label>
                                         <input type="number" class="form-control" placeholder="Ingrese cantidad" name="cantidad" required>
                                     </div>
-                                    <input type="hidden" class="form-control" value="normal" name="tipo">
+                                    <input type="hidden" id="tipo" class="form-control" name="tipo">
                                     <input type="hidden" class="form-control" value="<?= $seller['id'] ?>" name="id">
                                     <input type="hidden" class="form-control" value="traspasoStock" name="action">
                                     <div class="modal-footer">
@@ -160,9 +160,9 @@ $manager = $categoryController->getTerminated();
                                         <label for="cantidad"><b>Cantidad</b></label>
                                         <input type="number" class="form-control" placeholder="Ingrese cantidad" name="cantidad" required>
                                     </div>
-                                    <input type="hidden" class="form-control" value="retorno" name="tipo">
+                                    <input type="hidden" id="tipo"  name="tipo">
                                     <input type="hidden" class="form-control" value="<?= $seller['id'] ?>" name="id">
-                                    <input type="hidden" class="form-control" value="traspasoStock" name="action">
+                                    <input type="hidden" class="form-control" value="regresarStock" name="action">
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" onclick="closeForm('return-form-<?= $seller['id'] ?>')">Cerrar</button>
                                         <button type="submit" class="btn btn-primary">Regresar</button>
@@ -172,16 +172,18 @@ $manager = $categoryController->getTerminated();
                         </div>
                     </div>
                 </div>
-
             <?php endforeach; ?>
         </div>
     </div>
 </main>
 
 <script>
-    function openForm(formId) {
+    function openForm(formId, tipo) {
+        // Cambia el valor del campo con id "tipo" según el tipo pasado (normal o retorno)
+        $('#' + formId).find('#tipo').val(tipo);
         $('#' + formId).modal('show');
     }
+
     function closeForm(formId) {
         $('#' + formId).modal('hide');
     }

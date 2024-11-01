@@ -132,17 +132,30 @@
                         <tr><th>Fecha Creación</th><td><?= $user['fecha_creacion'] ?></td></tr>
                         <tr><th>Fecha Última Visita</th><td><?= $user['fecha_ultima_visita'] ?></td></tr>
                         <tr>
-                            <th>Vendedor</th>
-                            <td>
-                                <select name="vendedor">
-                                    <?php foreach ($subUs as $subU): ?>
-                                        <option value="<?= htmlspecialchars($subU['id']) ?>">
-                                            <?= htmlspecialchars($subU['id'] . ' - ' . $subU['nombre']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </td>
-                        </tr>
+    <th>Vendedor</th>
+    <td>
+        <select name="vendedor">
+            <?php 
+            $vendedorActualPresente = false;
+            foreach ($subUs as $subU): 
+                if ($subU['id'] == $user['vendedor']) {
+                    $vendedorActualPresente = true;
+                }
+            ?>
+                <option value="<?= htmlspecialchars($subU['id']) ?>" <?= $subU['id'] == $user['vendedor'] ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($subU['id'] . ' - ' . $subU['nombre']) ?>
+                </option>
+            <?php endforeach; ?>
+
+            <?php if (!$vendedorActualPresente): ?>
+                <option value="<?= htmlspecialchars($user['vendedor']) ?>" selected>
+                    <?= htmlspecialchars($user['vendedor'] . ' - ' . $user['vendedor']) ?>
+                </option>
+            <?php endif; ?>
+        </select>
+    </td>
+</tr>
+
                         <tr><th>Precio</th><td><input type="text" name="precio" value="<?= $user['precio'] ?>"></td></tr>
                         <tr><th>Codigo</th><td><canvas id="barcode" onclick="printl();"></canvas></td></tr>
                         <tr><th colspan="2" class="text-center">Inventario Inicial</th></tr>

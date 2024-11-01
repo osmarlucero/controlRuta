@@ -5,7 +5,6 @@ if (!isset($_SESSION) || $_SESSION['id'] == false) {
 }
 $categoryController = new categoryController();
 $items = $categoryController->getStocks($_SESSION['id']);
-$users = $categoryController->getUsers();
 $sellers = $categoryController->getSellers();
 $manager = $categoryController->getTerminated();
 ?>
@@ -31,107 +30,28 @@ $manager = $categoryController->getTerminated();
         });
     </script> 
     <style>
-        /* Estilos para la tabla */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 16px;
-            text-align: left;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        th {
-            background-color: #f2f2f2;
-            padding: 12px 16px;
-            font-weight: bold;
-            color: #333;
-            border-bottom: 2px solid #ddd;
-        }
-
-        td {
-            padding: 10px 16px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        /* Estilos para el contenedor */
-        .tabcontent {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-
-        h2 {
-            color: #333;
-            border-bottom: 2px solid #e9e9e9;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tab button {
-            background-color: #007bff;
-            color: white;
-            padding: 14px 20px;
-            margin: 0px 5px;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .tab button:hover {
-            background-color: #0056b3;
-        }
-
-        .tab button.active {
-            background-color: #0056b3;
-        }
-
+        /* Estilos para el diseño y tablas */
+        .mainContainer { display: flex; gap: 20px; justify-content: space-between; flex-wrap: wrap; }
+        .tabcontent { width: 100%; max-width: 48%; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 16px; text-align: left; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        th, td { padding: 12px 16px; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; font-weight: bold; color: #333; border-bottom: 2px solid #ddd; }
+        tr:hover { background-color: #f5f5f5; }
+        h2 { color: #333; border-bottom: 2px solid #e9e9e9; padding-bottom: 10px; margin-bottom: 20px; }
+        .btn-primary.btn-sm, .btn-secondary.btn-sm { margin-left: 10px; }
         /* Ajustes responsivos */
-        @media (max-width: 768px) {
-            .mainContainer {
-                width: 100%;
-                padding: 0 10px;
-            }
-
-            table {
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 375px) {
-            th, td {
-                font-size: 12px;
-                padding: 8px;
-            }
-
-            .tab button {
-                padding: 10px;
-                font-size: 14px;
-            }
-        }
+        @media (max-width: 768px) { .tabcontent { max-width: 100%; } table { font-size: 14px; } }
+        @media (max-width: 375px) { th, td { font-size: 12px; padding: 8px; } }
     </style>
 </head>
 
 <body>
 
 <header id="header"></header>
-<main class="container d-flex align-items-center justify-content-center">
+<main class="container">
     <div class="mainContainer">
-        <div class="tab">
-            <button class="tablinks active" onclick="openTab(event, 'propio')">Propio</button>
-            <button class="tablinks" onclick="openTab(event, 'vendedores')">Vendedores</button>
-        </div>
-
-        <!-- Propio Tab -->
+        
+        <!-- Tab de Inventario Propio -->
         <div id="propio" class="tabcontent">
             <h2>Propio</h2>
             <table>
@@ -152,17 +72,21 @@ $manager = $categoryController->getTerminated();
             </table>
         </div>
 
-        <!-- Vendedores Tab -->
-        <div id="vendedores" class="tabcontent" style="display: none;">
+        <!-- Tab de Inventario por Vendedores -->
+        <div id="vendedores" class="tabcontent">
             <?php foreach ($sellers as $seller): ?>
                 <h2><?= $seller['nombre'] ?> <?= $seller['id'] ?>
                     <button class="btn btn-primary btn-sm" onclick="openForm('form-<?= $seller['id'] ?>')">Añadir</button>
+                    <button class="btn btn-secondary btn-sm" onclick="openForm('return-form-<?= $seller['id'] ?>')">Regresar Inventario</button>
                 </h2>
                 <table>
-                    <tr>
-                        <th>Articulo</th>
-                        <th>Cantidad</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Artículo</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <?php 
                         $articles = $categoryController->getArticles($seller['id']); 
                         foreach ($articles as $article): 
@@ -172,6 +96,7 @@ $manager = $categoryController->getTerminated();
                             <td><?= $article['cantidad'] ?></td>
                         </tr>
                     <?php endforeach; ?>
+                    </tbody>
                 </table>
 
                 <!-- Formulario para añadir artículos -->
@@ -185,7 +110,7 @@ $manager = $categoryController->getTerminated();
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <form action="../app/categoryController.php" method="POST">
+                                <form action="../app/categoryController.php" method="POST">
                                     <div class="form-group">
                                         <label for="article"><b>Artículo</b></label>
                                         <select name="article" class="form-control" required>
@@ -194,14 +119,14 @@ $manager = $categoryController->getTerminated();
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-
                                     <div class="form-group mt-3">
                                         <label for="cantidad"><b>Cantidad</b></label>
                                         <input type="number" class="form-control" placeholder="Ingrese cantidad" name="cantidad" required>
                                     </div>
+                                    <input type="hidden" class="form-control" value="normal" name="tipo">
+                                    <input type="hidden" class="form-control" value="<?= $seller['id'] ?>" name="id">
+                                    <input type="hidden" class="form-control" value="traspasoStock" name="action">
                                     <div class="modal-footer">
-                                        <input type="hidden" class="form-control" value="<?= $seller['id'] ?>" name="id">
-                                        <input type="hidden" class="form-control" value="traspasoStock" name="action">
                                         <button type="button" class="btn btn-secondary" onclick="closeForm('form-<?= $seller['id'] ?>')">Cerrar</button>
                                         <button type="submit" class="btn btn-primary">Añadir</button>
                                     </div>
@@ -210,30 +135,53 @@ $manager = $categoryController->getTerminated();
                         </div>
                     </div>
                 </div>
+
+                <!-- Formulario para regresar artículos al inventario propio -->
+                <div id="return-form-<?= $seller['id'] ?>" class="form-popup modal fade" tabindex="-1" role="dialog" aria-labelledby="returnFormLabel-<?= $seller['id'] ?>" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="returnFormLabel-<?= $seller['id'] ?>">Regresar Artículo</h5>
+                                <button type="button" class="close" onclick="closeForm('return-form-<?= $seller['id'] ?>')" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="../app/categoryController.php" method="POST">
+                                    <div class="form-group">
+                                        <label for="article"><b>Artículo</b></label>
+                                        <select name="article" class="form-control" required>
+                                            <?php foreach ($articles as $article): ?>
+                                                <option value="<?= $article['id'] ?>"><?= $article['nombre'] ?> | <?= $article['cantidad'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="cantidad"><b>Cantidad</b></label>
+                                        <input type="number" class="form-control" placeholder="Ingrese cantidad" name="cantidad" required>
+                                    </div>
+                                    <input type="hidden" class="form-control" value="retorno" name="tipo">
+                                    <input type="hidden" class="form-control" value="<?= $seller['id'] ?>" name="id">
+                                    <input type="hidden" class="form-control" value="traspasoStock" name="action">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" onclick="closeForm('return-form-<?= $seller['id'] ?>')">Cerrar</button>
+                                        <button type="submit" class="btn btn-primary">Regresar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             <?php endforeach; ?>
         </div>
     </div>
 </main>
 
 <script>
-    function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
     function openForm(formId) {
         $('#' + formId).modal('show');
     }
-
     function closeForm(formId) {
         $('#' + formId).modal('hide');
     }

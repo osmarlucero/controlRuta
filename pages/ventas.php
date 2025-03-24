@@ -4,7 +4,7 @@
     $insumos = $categoryController->getVentas();
     $cantidades = $categoryController->getStats();
     $users = $categoryController->getUsersStats();
-   
+   echo json_encode($cantidades);
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }

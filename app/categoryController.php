@@ -75,12 +75,13 @@
 				$direccion = strip_tags($_POST['direccion']);
 				$correo = strip_tags($_POST['correo']);
 				$RFC = strip_tags($_POST['RFC']);
+				$fechaCreacion = strip_tags($_POST['fecha_creacion']);
 				$telefono = strip_tags($_POST['telefono']);
 				$vendedor = strip_tags($_POST['vendedor']);
 				$precio = strip_tags($_POST['precio']);
 				$lat = strip_tags($_POST['lat']);
 				$lng = strip_tags($_POST['lng']);
-				$CategoryController->updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng);
+				$CategoryController->updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng,$fechaCreacion);
 
 			break;
 			case 'updateFact':
@@ -99,10 +100,14 @@
 			    $cantidad = strip_tags($_POST['cantidad']);
 			    $tipo = strip_tags($_POST['tipo']);
 			    $de = $_SESSION['id'];
-			    $a = strip_tags($_POST['id']);		    
-			    echo $tipo;
+			    $a = strip_tags($_POST['id']);	
+			    if($tipo=="normal"){
+			    	$CategoryController->modifyStockSeller($producto, $cantidad, $de, $a,$tipo);
+			    }else{
+  			    	$CategoryController->modifyStockSeller($producto, $cantidad, $a, $de,$tipo);
+  			    	//echo ($producto."P".$cantidad."C".$a."A".$de."D".$tipo."T");
+			    }
 			    // Llamada al método modifyStock para modificar entre estados
-			    //$CategoryController->modifyStockSeller($producto, $cantidad, $de, $a,$tipo);
 		    break;
 		}
 	}
@@ -317,13 +322,13 @@
 		        header("Location:" . $_SERVER["HTTP_REFERER"]);
 		    }
 		}
-		public function updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng) {
+		public function updateStore($id_tienda, $nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng,$fechaCreacion) {
 		    $conn = connect();
 		    if ($conn->connect_error == false) {
-		        $query = "UPDATE tienda SET nombre = ?, nombre_responsable = ?, direccion = ?, correo = ?, RFC = ?, telefono = ?, vendedor = ?, precio = ?, lat = ?, lng = ?
+		        $query = "UPDATE tienda SET nombre = ?, nombre_responsable = ?, direccion = ?, correo = ?, RFC = ?, telefono = ?, vendedor = ?, precio = ?, lat = ?, lng = ?, fecha_creacion=?
 		         WHERE id_tienda = ?";
 		        $prepared_query = $conn->prepare($query);
-		        $prepared_query->bind_param('ssssssiissi',$nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng,$id_tienda);
+		        $prepared_query->bind_param('ssssssiisssi',$nombre, $nombre_responsable, $direccion, $correo, $RFC, $telefono, $vendedor, $precio,$lat,$lng,$fechaCreacion,$id_tienda);
 
 		        if ($prepared_query->execute()) {
 		            // El procedimiento se ejecutó correctamente
@@ -611,7 +616,10 @@
 	 			//$id=$_SESSION['id'];
 				if ($conn->connect_error==false){	
 					if(true){
+						/*
 						$query = "SELECT v.id_vendedor, t.id_tienda, t.nombre AS nombre_tienda, dv.nombre_articulo, SUM(dv.cantidad) AS cantidad_total FROM ventas v JOIN detalleventa dv ON v.venta_id = dv.venta_id JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.fecha_venta BETWEEN ? AND ? AND v.id_vendedor IN (SELECT id FROM users WHERE encargado = ?) GROUP BY t.id_tienda, t.nombre, dv.nombre_articulo;";
+						*/
+						$query = "SELECT v.id_vendedor, t.id_tienda, t.nombre AS nombre_tienda, dv.idArticulo, dv.nombre_articulo, SUM(dv.cantidad) AS cantidad_total FROM ventas v JOIN detalleventa dv ON v.venta_id = dv.venta_id JOIN tienda t ON v.cliente_id = t.id_tienda WHERE v.fecha_venta BETWEEN ? AND ? AND v.id_vendedor IN (SELECT id FROM users WHERE encargado = ?) GROUP BY t.id_tienda, dv.idArticulo;";
 						$prepared_query = $conn->prepare($query);
 						$prepared_query->bind_param('sss',$fechaInicio,$fechaFinal,$user);					
 					}
@@ -740,7 +748,7 @@
 	 			$conn = connect();
 	 			$id=$_SESSION['id'];
 				if ($conn->connect_error==false){
-					if($_SESSION['rol']=="Admin"){
+					/*if($_SESSION['rol']=="Admin"){
 						$query = "select * FROM tienda Order by id_tienda DESC";
 						$prepared_query = $conn->prepare($query);
 					}
@@ -748,7 +756,9 @@
 						$query = "SELECT * from tienda where vendedor = (SELECT id FROM users WHERE encargado = ?)";
 						$prepared_query = $conn->prepare($query);
 						$prepared_query->bind_param('i',$id);
-					}			
+					}*/		
+					$query = "select * FROM location Order by id_location DESC";
+					$prepared_query = $conn->prepare($query);	
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();
 					$stores = $results->fetch_all(MYSQLI_ASSOC);

@@ -152,7 +152,7 @@ $manager = $categoryController->getTerminated();
                                         <label for="article"><b>Artículo</b></label>
                                         <select name="article" class="form-control" required>
                                             <?php foreach ($articles as $article): ?>
-                                                <option value="<?= $article['id'] ?>"><?= $article['nombre'] ?> | <?= $article['cantidad'] ?></option>
+                                                <option value="<?= $article['id_articulo'] ?>"><?= $article['nombre'] ?> | <?= $article['cantidad'] ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>

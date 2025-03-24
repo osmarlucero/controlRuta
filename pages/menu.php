@@ -121,6 +121,25 @@
                                 $nombreUsuario=$_SESSION['nombre'];
                                 echo '<span class="nav-link">Hola, ' . $nombreUsuario . '</span>'?>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="main.php">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="usuarios.php">Usuarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="stores.php">Tiendas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="ventas.php">Ventas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="inventarios.php">Inventarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="incidentes.php">Incidentes</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="25" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
@@ -131,10 +150,6 @@
                             </a>
                             <div id="notiCount" class="dropdown-menu" aria-labelledby="navbarDropdown">
                             </div>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="main.php">Inicio</a>
                         </li>
                        <?php
                             if($_SESSION['rol']=="Admin"){

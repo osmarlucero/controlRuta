@@ -111,6 +111,7 @@
     <main class="container d-flex align-items-center justify-content-center">
         <form class="mainContainer" action="../app/categoryController.php" method="POST">
         <div class="">
+            <a class="text-center btn btn-secondary" href="stores.php">Regresar</a>
             <div class="row">
                 <div class="col-6">
                     <h2 class="mb-4">Datos De Tienda</h2>
@@ -129,7 +130,7 @@
                         <tr><th>Correo</th><td><input type="text" name="correo" value="<?= $user['correo'] ?>"></td></tr>
                         <tr><th>RFC</th><td><input type="text" name="RFC" value="<?= $user['RFC'] ?>"></td></tr>
                         <tr><th>Teléfono</th><td><input type="text" name="telefono" value="<?= $user['telefono'] ?>"></td></tr>
-                        <tr><th>Fecha Creación</th><td><?= $user['fecha_creacion'] ?></td></tr>
+                        <tr><th>Fecha Creación</th><td><input type="date" name="fecha_creacion" value="<?= $user['fecha_creacion'] ?>"></td></tr>
                         <tr><th>Fecha Última Visita</th><td><?= $user['fecha_ultima_visita'] ?></td></tr>
                         <tr>
     <th>Vendedor</th>

@@ -742,7 +742,36 @@
 			}else
 				return array();
 		}
-
+public function getLocationsSecond(){
+			if(true){
+	 			$conn = connect();
+	 			$id=$_SESSION['id'];
+				if ($conn->connect_error==false){
+					/*if($_SESSION['rol']=="Admin"){
+						$query = "select * FROM tienda Order by id_tienda DESC";
+						$prepared_query = $conn->prepare($query);
+					}
+					else{
+						$query = "SELECT * from tienda where vendedor = (SELECT id FROM users WHERE encargado = ?)";
+						$prepared_query = $conn->prepare($query);
+						$prepared_query->bind_param('i',$id);
+					}*/		
+					$query = "select * FROM location Order by id_location DESC";
+					$prepared_query = $conn->prepare($query);	
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
 		public function getLocations(){
 			if(true){
 	 			$conn = connect();

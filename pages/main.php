@@ -43,17 +43,6 @@
     <main class="container mt-5">
         <div class="row justify-content-center">
         <!-- Tiendas -->
-            <div class="col-lg-3 col-md-6 mb-4">
-                <a href="storesSecond.php" class="text-decoration-none card-container">
-                    <div class="card h-100 bg-light shadow">
-                        <img src="../images/store.png" class="card-img-top" alt="Tiendas">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Tiendas</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
             <!-- Usuarios -->
             <div class="col-lg-3 col-md-6 mb-4">
                 <a href="usuarios.php" class="text-decoration-none card-container">

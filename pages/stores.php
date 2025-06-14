@@ -6,6 +6,7 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
     header("Location:../");
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 

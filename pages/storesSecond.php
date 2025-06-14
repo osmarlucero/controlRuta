@@ -45,26 +45,54 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
             mainContainer.classList.add('d-none');
         }
 
-        function initMap() {
-            var locations = <?php echo json_encode($users); ?>;
-            console.log(locations);
+       function initMap() {
+    var locations = <?php echo json_encode($users); ?>;
+    console.log(locations);
 
-            for (var i = 0; i < locations.length; i++) {
-                locations[i].lat = parseFloat(locations[i].lat);
-                locations[i].lng = parseFloat(locations[i].lng);
-            }
+    for (var i = 0; i < locations.length; i++) {
+        locations[i].lat = parseFloat(locations[i].lat);
+        locations[i].lng = parseFloat(locations[i].lng);
+    }
 
-            if (locations.length > 0) {
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    center: locations[0],
-                    zoom: 10
-                });
+    // Opciones predeterminadas (si no se obtiene la ubicación)
+    var defaultLocation = locations.length > 0 ? locations[0] : { lat: 24.1426, lng: -110.3128 }; // Coordenadas de La Paz, BCS como fallback
 
-                for (var i = 0; i < locations.length; i++) {
-                    addMarker(locations[i], map, locations[i].id_tienda);
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: defaultLocation,
+        zoom: 12
+    });
+
+    // Intentar obtener la ubicación del usuario
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            // Centrar el mapa en la ubicación del usuario
+            map.setCenter(userLocation);
+
+            // Agregar un marcador para la ubicación actual
+            new google.maps.Marker({
+                position: userLocation,
+                map: map,
+                title: 'Tu ubicación',
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
                 }
-            }
-        }
+            });
+        }, function () {
+            console.warn("No se pudo obtener la ubicación del usuario.");
+        });
+    }
+
+    // Agregar los marcadores de las tiendas
+    for (var i = 0; i < locations.length; i++) {
+        addMarker(locations[i], map, locations[i].id_tienda);
+    }
+}
+
 
         function addMarker(location, map, id) {
             var marker = new google.maps.Marker({

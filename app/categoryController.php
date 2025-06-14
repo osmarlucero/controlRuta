@@ -777,7 +777,7 @@ public function getLocationsSecond(){
 	 			$conn = connect();
 	 			$id=$_SESSION['id'];
 				if ($conn->connect_error==false){
-					/*if($_SESSION['rol']=="Admin"){
+					if($_SESSION['rol']=="Admin"){
 						$query = "select * FROM tienda Order by id_tienda DESC";
 						$prepared_query = $conn->prepare($query);
 					}
@@ -785,8 +785,7 @@ public function getLocationsSecond(){
 						$query = "SELECT * from tienda where vendedor = (SELECT id FROM users WHERE encargado = ?)";
 						$prepared_query = $conn->prepare($query);
 						$prepared_query->bind_param('i',$id);
-					}*/		
-					$query = "select * FROM location Order by id_location DESC";
+					}
 					$prepared_query = $conn->prepare($query);	
 					$prepared_query->execute();
 					$results = $prepared_query->get_result();

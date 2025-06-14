@@ -7,9 +7,8 @@ body {
     background-size: cover;
 }
 
-.mainContainer {
-    background-color: #3498db;
-    min-width: 60%;
+.mainContainer { 
+   min-width: 60%;
     margin: 20px auto;
     padding: 20px;
     border-radius: 10px;

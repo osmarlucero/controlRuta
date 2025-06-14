@@ -4,7 +4,6 @@
     $insumos = $categoryController->getVentas();
     $cantidades = $categoryController->getStats();
     $users = $categoryController->getUsersStats();
-   echo json_encode($cantidades);
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }
@@ -227,6 +226,29 @@
             margin-top: 5%;
         }
     </style>
+    <script>
+function filterByDate() {
+    const selectedDate = document.getElementById("filterDate").value;
+    const table = document.getElementById("salesTable");
+    const rows = table.getElementsByTagName("tr");
+
+    // Loop desde el segundo <tr> para evitar la cabecera
+    for (let i = 1; i < rows.length; i++) {
+        const dateCell = rows[i].cells[1]; // Segunda columna = fecha
+        const rowDate = dateCell.textContent.trim();
+
+        // Formatear la fecha del <td> a yyyy-mm-dd
+        const formattedRowDate = new Date(rowDate).toISOString().split('T')[0];
+
+        if (!selectedDate || formattedRowDate === selectedDate) {
+            rows[i].style.display = "table-row";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
+</script>
+
 </head>
 <body>
 
@@ -274,8 +296,12 @@
                 <li class="nav-item btn-p" onclick="onAdd()">Ventas Realizadas</li>
                 <li class="nav-item btn-p" onclick="onRemove()">Estadisticas</li>
                 <button type="button" class="btn btn-primary" id="mostrarModal">Generar Reporte</button>
-
             </ul>
+            <div class="my-3">
+    <label for="filterDate" class="form-label">Filtrar por Día:</label>
+    <input type="date" id="filterDate" class="form-control" onchange="filterByDate()" />
+</div>
+
             <ul id="tableItems" class="ulMain item-list">
                <table id="salesTable" class="default">
                     <tr>
@@ -285,7 +311,6 @@
                         <td>Tipo De Venta</td>
                         <td>Cantidad De Piezas</td>
                         <td>Total Venta</td>
-                        <td>Forma De Pago</td>
                     </tr>
                     <?php foreach ($insumos as $insumo): ?>
                     <tr>
@@ -295,7 +320,6 @@
                         <td><?= $insumo['tipo_venta'] ?></td>
                         <td><?= $insumo['cantidad_piezas'] ?></td>
                         <td><?= $insumo['total_venta'] ?></td>
-                        <td><?= $insumo['forma_de_pago'] ?></td>
                     </tr>
                     <?php endforeach ?>
 

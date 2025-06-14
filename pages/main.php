@@ -101,6 +101,17 @@
                     </div>
                 </a>
             </div>
+            <!-- Merma -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <a href="incidentes.php" class="text-decoration-none card-container">
+                    <div class="card h-100 bg-light shadow">
+                        <img src="../images/merma.png" class="card-img-top" alt="Inventarios">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Merma</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
 
         </div>
     </main>

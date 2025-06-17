@@ -1,11 +1,11 @@
 <?php
     include "../app/mermaController.php";
-    $mermaController = new mermaController();
-    $incidents = $mermaController->getMerma();
-   
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }
+    $mermaController = new mermaController();
+    $incidents = $mermaController->getMerma();
+   
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -27,7 +27,7 @@
         </script> 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-            const itemsPerPage = 10;
+            const itemsPerPage = 20;
             const itemList = document.querySelector('.item-list');
             const paginationContainer = document.getElementById('pagination');
 
@@ -67,18 +67,41 @@
 
         <header id="header"></header>
         <!-- Formulario 1: Usuarios -->
-        <main class="container d-flex align-items-center justify-content-center">
-            <div class="mainContainer">
-                <p class="">Incidentes Existentes</p></a>
-                <ul class="ulMain item-list">
-                    <?php foreach ($incidents as $incident): ?>
-                    <li><?= $incident['nombre_tienda'] ?> | <?= $incident['descripcion'] ?> | <?= $incident['fecha'] ?> | <a href="incidentDetail.php?id=<?= $incident['id'] ?>">Ver Detalle</a>                       
-                    </li>        
-                    <?php endforeach ?>
-                    <!-- Agrega más elementos del formulario según sea necesario -->
-                </ul>
-            </div>
-        </main>
+        <main class="container my-5">
+    <div class="mainContainer w-100">
+        <h3 class="mb-4 text-center">Mermas Existentes</h3>
+
+        <?php if (count($incidents) > 0): ?>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($incidents as $incident): ?>
+                <tr>
+                    <td><?= $incident['nombre_tienda'] ?></td>
+                    <td><?= $incident['cantidad'] ?></td>
+                    <td><?= $incident['fecha'] ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php else: ?>
+            <p class="text-center">No hay registros de merma disponibles.</p>
+        <?php endif; ?>
+
+        <!--  Aquí dejas en blanco para lo que necesites añadir  -->
+        
+        
+        
+        
+    </div>
+</main>
+
         <div id="pagination" class="pagination"></div>
         
     </body>

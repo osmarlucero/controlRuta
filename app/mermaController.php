@@ -34,11 +34,11 @@
 		            // Encargado solo ve mermas de los vendedores a su cargo
 		            $query = "SELECT merma.*, tienda.nombre AS nombre_tienda 
 		                      FROM merma 
-		                      JOIN tienda ON merma.tienda_id = tienda.id_tienda 
+		                      JOIN tienda ON merma.id_tienda = tienda.id_tienda 
 		                      WHERE merma.id_vendedor = (
 		                          SELECT id FROM users WHERE encargado = ?
 		                      ) 
-		                      ORDER BY merma.id DESC;";
+		                      ORDER BY merma.id_merma DESC;";
 		            $prepared_query = $conn->prepare($query);
 		            $prepared_query->bind_param('i', $id);
 		        }

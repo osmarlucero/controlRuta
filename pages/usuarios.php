@@ -66,7 +66,13 @@
     <!-- Formulario 1: Usuarios -->
     <main class="container d-flex align-items-center justify-content-center">
         <div class="mainContainer">
-            <p class="">Usuarios Existentes</p><a href="createUser.php">Crear Usuario</a>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Usuarios Existentes</h2>
+    <div>
+        <a href="main.php" class="btn btn-secondary me-2">Regresar</a>
+        <a href="createUser.php" class="btn btn-primary">Crear Usuario</a>
+    </div>
+</div>
             <ul class="ulMain item-list">
                 <?php foreach ($users as $user): ?>
                 <li><?= $user['id'] ?> | <?= $user['nombre'] ?> <?= $user['apellido'] ?> Rol:<?= $user['rol'] ?>

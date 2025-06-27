@@ -104,7 +104,10 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
 
     <main class="container mt-5">
         <div class="mainContainer">
-            <h2 class="mb-4">Tiendas Existentes</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Tiendas Existentes</h2>
+    <a href="main.php" class="btn btn-secondary">Regresar</a>
+</div>
             <div class="">
                 <p onclick="remvMap()" class="btn btn-success">Listado</p>
                 <p onclick="remvList()" class="btn btn-success">Mapa</p>

@@ -49,6 +49,10 @@ $manager = $categoryController->getTerminated();
 
 <header id="header"></header>
 <main class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1 class="mb-0">Inventarios</h1>
+        <a href="main.php" class="btn btn-outline-dark">Regresar</a>
+    </div>
     <div class="mainContainer">
         
         <!-- Tab de Inventario Propio -->

@@ -69,7 +69,10 @@
         <!-- Formulario 1: Usuarios -->
         <main class="container my-5">
     <div class="mainContainer w-100">
-        <h3 class="mb-4 text-center">Mermas Existentes</h3>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0">Mermas Existentes</h3>
+    <a href="main.php" class="btn btn-outline-dark">Regresar</a>
+</div>
 
         <?php if (count($incidents) > 0): ?>
         <table class="table table-striped table-bordered">

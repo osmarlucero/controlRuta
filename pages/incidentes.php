@@ -69,7 +69,10 @@
         <!-- Formulario 1: Usuarios -->
         <main class="container d-flex align-items-center justify-content-center">
             <div class="mainContainer">
-                <p class="">Incidentes Existentes</p></a>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Incidentes Existentes</h2>
+    <a href="main.php" class="btn btn-outline-dark">Regresar</a>
+</div>
                 <ul class="ulMain item-list">
                     <?php foreach ($incidents as $incident): ?>
                     <li><?= $incident['nombre_tienda'] ?> | <?= $incident['descripcion'] ?> | <?= $incident['fecha'] ?> | <a href="incidentDetail.php?id=<?= $incident['id'] ?>">Ver Detalle</a>                       

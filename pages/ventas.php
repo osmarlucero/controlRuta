@@ -293,6 +293,7 @@ function filterByDate() {
     <main class="container d-flex align-items-center justify-content-center">
         <div class="mainContainer">
             <ul class="nav">
+                <li class="nav-item btn-p" ><a href="main.php" class="me-2">Regresar</a></li>
                 <li class="nav-item btn-p" onclick="onAdd()">Ventas Realizadas</li>
                 <li class="nav-item btn-p" onclick="onRemove()">Estadisticas</li>
                 <button type="button" class="btn btn-primary" id="mostrarModal">Generar Reporte</button>

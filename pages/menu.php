@@ -159,8 +159,7 @@
                                     </a>
                                     <div  class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="insumos.php">Existencias</a>
-                                        <a class="dropdown-item" href="setProducInfo.php">Categorias</a>
-                                        <a class="dropdown-item" href="upload.php">Subir Producto</a>
+                                        <a class="dropdown-item" href="pedidos.php">Pedidos</a>
                                     </div>
                                 </li>';
                             }

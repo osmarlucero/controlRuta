@@ -109,10 +109,108 @@
 			    }
 			    // Llamada al método modifyStock para modificar entre estados
 		    break;
+		    case 'uploadPedido':
+			    $detalle = strip_tags($_POST['detalle']);
+			    $proveedor = strip_tags($_POST['proveedor']);
+			    $num_guia = strip_tags($_POST['num_guia']);
+			    $estado = strip_tags($_POST['estado']);
+			    $fecha_pedido = strip_tags($_POST['fecha_pedido']);
+			    $fecha_entrga = strip_tags($_POST['fecha_entrga']);
+			    $monto = strip_tags($_POST['monto']);
+
+			    $CategoryController->uploadPedido(
+			        $detalle,
+			        $proveedor,
+			        $num_guia,
+			        $estado,
+			        $fecha_pedido,
+			        $fecha_entrga,
+			        $monto
+			    );
+			break;
+			case 'updatePedidoEstado':
+			    $id_pedido = intval($_POST['id_pedido']);
+			    $estado = strip_tags($_POST['estado']);
+			    $fecha_entrga = strip_tags($_POST['fecha_entrga']);
+
+			    $CategoryController->updatePedidoEstado(
+			        $id_pedido,
+			        $estado,
+			        $fecha_entrga
+			    );
+			break;
+
 		}
 	}
 
 	class CategoryController{
+		public function updatePedidoEstado($id_pedido, $estado, $fecha_entrga) {
+		    $conn = connect();
+
+		    if ($conn->connect_error == false) {
+		        // Query de actualización
+		        $query = "UPDATE pedidos 
+		                  SET estado = ?, fecha_entrga = ? 
+		                  WHERE id_pedidos = ?";
+		        
+		        $prepared_query = $conn->prepare($query);
+		        $prepared_query->bind_param('ssi', $estado, $fecha_entrga, $id_pedido);
+
+		        if ($prepared_query->execute()) {
+		            $_SESSION['success'] = "Pedido actualizado correctamente";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        } else {
+		            $_SESSION['error'] = "Error al actualizar el pedido";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        }
+		    } else {
+		        $_SESSION['error'] = "Error de conexión con la BD";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		    }
+		}
+
+		public function uploadPedido($detalle, $proveedor, $num_guia, $estado, $fecha_pedido, $fecha_entrga, $monto) {
+		    $conn = connect();
+
+		    if ($conn->connect_error == false) {
+		        // Query de inserción
+		        $query = "INSERT INTO pedidos (detalle, proveedor, num_guia, estado, fecha_pedido, monto, fecha_entrga) 
+		                  VALUES (?, ?, ?, ?, ?, ?, ?)";
+		        
+		        $prepared_query = $conn->prepare($query);
+		        $prepared_query->bind_param('sssssds',$detalle,$proveedor,$num_guia,$estado,$fecha_pedido,$monto,$fecha_entrga);
+
+		        if ($prepared_query->execute()) {
+		            $_SESSION['success'] = "Pedido agregado correctamente";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        } else {
+		            $_SESSION['error'] = "Error al insertar el pedido";
+		            header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        }
+		    } else {
+		        $_SESSION['error'] = "Error de conexión con la BD";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		    }
+		}
+
+
+		public function getPedidos(){
+ 			$conn = connect();
+			if ($conn->connect_error==false){		
+				$query = "SELECT * FROM `pedidos` ORDER BY `pedidos`.`id_pedidos` DESC";
+				$prepared_query = $conn->prepare($query);
+				$prepared_query->execute();
+				$results = $prepared_query->get_result();
+				$insumos = $results->fetch_all(MYSQLI_ASSOC);
+				if( count($insumos)>0){
+					return $insumos;
+				}else{
+					return array();				
+				}
+			}else{
+				echo "error";
+			}
+		}
 		public function getUsersControl($id){
  			$conn = connect();
 			if ($conn->connect_error==false){		

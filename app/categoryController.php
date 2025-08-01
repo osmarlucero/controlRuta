@@ -110,94 +110,129 @@
 			    // Llamada al método modifyStock para modificar entre estados
 		    break;
 		    case 'uploadPedido':
-			    $detalle = strip_tags($_POST['detalle']);
-			    $proveedor = strip_tags($_POST['proveedor']);
-			    $num_guia = strip_tags($_POST['num_guia']);
-			    $estado = strip_tags($_POST['estado']);
-			    $fecha_pedido = strip_tags($_POST['fecha_pedido']);
-			    $fecha_entrga = strip_tags($_POST['fecha_entrga']);
-			    $monto = strip_tags($_POST['monto']);
+			    $detalle       = strip_tags($_POST['detalle']); 
+			    $proveedor     = strip_tags($_POST['proveedor']);
+			    $num_guia      = strip_tags($_POST['num_guia']);
+			    $estado        = strip_tags($_POST['estado']);
+			    $fecha_pedido  = strip_tags($_POST['fecha_pedido']);
+			    $fecha_entrga  = strip_tags($_POST['fecha_entrga']);
+			    $monto         = strip_tags($_POST['monto']);
 
+			    // Convertimos a arrays
+			    $detallesArray = array_map('trim', explode(',', $detalle));
+			    $guiasArray    = array_map('trim', explode(',', $num_guia));
+
+			    // Pasamos todo a la función
 			    $CategoryController->uploadPedido(
-			        $detalle,
+			        $detallesArray,
 			        $proveedor,
-			        $num_guia,
+			        $guiasArray,
 			        $estado,
 			        $fecha_pedido,
 			        $fecha_entrga,
 			        $monto
 			    );
 			break;
-			case 'updatePedidoEstado':
-			    $id_pedido = intval($_POST['id_pedido']);
-			    $estado = strip_tags($_POST['estado']);
-			    $fecha_entrga = strip_tags($_POST['fecha_entrga']);
 
-			    $CategoryController->updatePedidoEstado(
-			        $id_pedido,
-			        $estado,
-			        $fecha_entrga
-			    );
-			break;
+		case 'updatePedidoEstado':
+		    $num_guia = strip_tags($_POST['num_guia']);
+		    $estado = strip_tags($_POST['estado']);
+		    $fecha_entrga = strip_tags($_POST['fecha_entrga']);
+		    //echo  $num_guia.$estado.$fecha_entrga;
+		    // Llama al método que actualiza usando num_guia, no id_pedido
+		    $CategoryController->updatePedidoEstadoByNumGuia(
+		        $num_guia,
+		        $estado,
+		        $fecha_entrga
+		    );
+    	break;
+
 
 		}
 	}
 
 	class CategoryController{
-		public function updatePedidoEstado($id_pedido, $estado, $fecha_entrga) {
+		public function updatePedidoEstadoByNumGuia($id_guia, $estado, $fecha_entrega) {
 		    $conn = connect();
-
 		    if ($conn->connect_error == false) {
-		        // Query de actualización
-		        $query = "UPDATE pedidos 
-		                  SET estado = ?, fecha_entrga = ? 
-		                  WHERE id_pedidos = ?";
-		        
+		        $query = "UPDATE numeros_guia 
+		                  SET estado = ?, fecha_entrega = ? 
+		                  WHERE num_guia = ?";
 		        $prepared_query = $conn->prepare($query);
-		        $prepared_query->bind_param('ssi', $estado, $fecha_entrga, $id_pedido);
+		        $prepared_query->bind_param('ssi', $estado, $fecha_entrega, $id_guia);
 
 		        if ($prepared_query->execute()) {
-		            $_SESSION['success'] = "Pedido actualizado correctamente";
+		            $_SESSION['success'] = "Estado de guía actualizado correctamente";
 		            header("Location:" . $_SERVER["HTTP_REFERER"]);
 		        } else {
-		            $_SESSION['error'] = "Error al actualizar el pedido";
+		            $_SESSION['error'] = "Error al actualizar estado de guía";
 		            header("Location:" . $_SERVER["HTTP_REFERER"]);
 		        }
 		    } else {
-		        $_SESSION['error'] = "Error de conexión con la BD";
-		        header("Location:" . $_SERVER["HTTP_REFERER"]);
-		    }
-		}
-
-		public function uploadPedido($detalle, $proveedor, $num_guia, $estado, $fecha_pedido, $fecha_entrga, $monto) {
-		    $conn = connect();
-
-		    if ($conn->connect_error == false) {
-		        // Query de inserción
-		        $query = "INSERT INTO pedidos (detalle, proveedor, num_guia, estado, fecha_pedido, monto, fecha_entrga) 
-		                  VALUES (?, ?, ?, ?, ?, ?, ?)";
-		        
-		        $prepared_query = $conn->prepare($query);
-		        $prepared_query->bind_param('sssssds',$detalle,$proveedor,$num_guia,$estado,$fecha_pedido,$monto,$fecha_entrga);
-
-		        if ($prepared_query->execute()) {
-		            $_SESSION['success'] = "Pedido agregado correctamente";
-		            header("Location:" . $_SERVER["HTTP_REFERER"]);
-		        } else {
-		            $_SESSION['error'] = "Error al insertar el pedido";
-		            header("Location:" . $_SERVER["HTTP_REFERER"]);
-		        }
-		    } else {
-		        $_SESSION['error'] = "Error de conexión con la BD";
+		        $_SESSION['error'] = "Conexión Mala BD";
 		        header("Location:" . $_SERVER["HTTP_REFERER"]);
 		    }
 		}
 
 
+		public function uploadPedido($detallesArray, $proveedor, $guiasArray, $estado, $fecha_pedido, $fecha_entrga, $monto) {
+		    $conn = connect();
+		    if ($conn->connect_error) {
+		        $_SESSION['error'] = "Error de conexión con la BD";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		        exit;
+		    }
+		    try {
+		        $conn->begin_transaction();
+		        $queryPedido = "INSERT INTO pedidos (proveedor, estado, fecha_pedido, monto, fecha_entrga) 
+		                        VALUES (?, ?, ?, ?, ?)";
+		        $stmtPedido = $conn->prepare($queryPedido);
+		        $stmtPedido->bind_param('sssds', $proveedor, $estado, $fecha_pedido, $monto, $fecha_entrga);
+		        $stmtPedido->execute();
+
+		        // Obtener id generado
+		        $idPedido = $conn->insert_id;
+
+		        // Insertar guías
+		        $queryGuia = "INSERT INTO numeros_guia (id_pedidos, num_guia, estado, fecha_entrega, observaciones) 
+		                      VALUES (?, ?, ?, ?, ?)";
+		        $stmtGuia = $conn->prepare($queryGuia);
+
+		        foreach ($guiasArray as $index => $guia) {
+		            $detalleGuia = $detallesArray[$index] ?? null;
+		            $stmtGuia->bind_param('issss', $idPedido, $guia, $estado, $fecha_entrga, $detalleGuia);
+		            $stmtGuia->execute();
+		        }
+
+		        // Confirmar transacción
+		        $conn->commit();
+
+		        $_SESSION['success'] = "Pedido y guías agregados correctamente";
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+
+		    } catch (Exception $e) {
+		        $conn->rollback();
+		        $_SESSION['error'] = "Error al insertar el pedido: " . $e->getMessage();
+		        header("Location:" . $_SERVER["HTTP_REFERER"]);
+		    }
+		}
 		public function getPedidos(){
  			$conn = connect();
 			if ($conn->connect_error==false){		
-				$query = "SELECT * FROM `pedidos` ORDER BY `pedidos`.`id_pedidos` DESC";
+				$query ="SELECT 
+						    p.id_pedidos,
+						    p.proveedor,
+						    p.estado,
+						    p.fecha_pedido,
+						    p.fecha_entrga,
+						    p.monto,
+						    GROUP_CONCAT(ng.num_guia SEPARATOR ', ') AS num_guia,
+						    GROUP_CONCAT(ng.observaciones SEPARATOR ', ') AS detalle
+						    GROUP_CONCAT(ng.fecha_entrega SEPARATOR ', ') AS fecha_entrga
+						FROM pedidos p
+						LEFT JOIN numeros_guia ng ON p.id_pedidos = ng.id_pedidos
+						GROUP BY p.id_pedidos
+						ORDER BY p.id_pedidos DESC;";
 				$prepared_query = $conn->prepare($query);
 				$prepared_query->execute();
 				$results = $prepared_query->get_result();

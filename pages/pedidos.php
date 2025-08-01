@@ -52,27 +52,27 @@ if (!isset($_SESSION) || $_SESSION['id'] == false) {
                     <tbody>
                         <?php foreach ($pedidos as $pedido): ?>
                             <tr>
-                                <td><?= $pedido['num_guia'] ?></td>
-                                <td><?= $pedido['detalle'] ?></td>
-                                <td><?= $pedido['proveedor'] ?></td>
+                                <td><?= htmlspecialchars($pedido['num_guia']) ?></td>
+                                <td><?= htmlspecialchars($pedido['detalle']) ?></td>
+                                <td><?= htmlspecialchars($pedido['proveedor']) ?></td>
                                 <td>
                                     <span class="badge <?= $pedido['estado'] == 'Entregado' ? 'bg-success' : 'bg-warning text-dark' ?>">
-                                        <?= $pedido['estado'] ?>
+                                        <?= htmlspecialchars($pedido['estado']) ?>
                                     </span>
-                                    <!-- Ícono de lápiz para editar -->
                                     <button 
                                         class="btn btn-sm btn-outline-primary ms-1"
                                         data-bs-toggle="modal" 
                                         data-bs-target="#modalEditarEstado"
-                                        data-id="<?= $pedido['id_pedidos'] ?>"
-                                        data-estado="<?= $pedido['estado'] ?>"
-                                        data-fecha="<?= $pedido['fecha_entrga'] ?>"
+                                        data-id="<?= htmlspecialchars($pedido['id_pedidos']) ?>"
+                                        data-num-guia="<?= htmlspecialchars($pedido['num_guia']) ?>"
+                                        data-estado="<?= htmlspecialchars($pedido['estado']) ?>"
+                                        data-fecha="<?= htmlspecialchars($pedido['fecha_entrga']) ?>"
                                     >
-                                        ✏️
+                                        Editar
                                     </button>
                                 </td>
-                                <td><?= $pedido['fecha_pedido'] ?></td>
-                                <td><?= $pedido['fecha_entrga'] ?? '-' ?></td>
+                                <td><?= htmlspecialchars($pedido['fecha_pedido']) ?></td>
+                                <td><?= htmlspecialchars($pedido['fecha_entrga'] ?? '-') ?></td>
                                 <td>$<?= number_format($pedido['monto'], 2) ?></td>
                             </tr>
                         <?php endforeach; ?>
@@ -117,7 +117,7 @@ if (!isset($_SESSION) || $_SESSION['id'] == false) {
           </div>
           <div class="mb-3">
               <label class="form-label">Fecha Entrega</label>
-              <input type="date" class="form-control" name="fecha_entrga" required>
+              <input type="date" class="form-control" name="fecha_entrga" >
           </div>
           <div class="mb-3">
               <label class="form-label">Monto</label>
@@ -139,11 +139,16 @@ if (!isset($_SESSION) || $_SESSION['id'] == false) {
     <form method="POST" action="../app/categoryController.php" class="modal-content">
       <div class="modal-header bg-warning">
         <h5 class="modal-title" id="modalEditarEstadoLabel">Actualizar Estado</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-          <input type="hidden" name="id_pedido" id="edit_id_pedido">
+          <!-- Eliminado el hidden id_pedido porque no quieres enviar el id -->
           <input type="hidden" name="action" value="updatePedidoEstado">
+
+          <div class="mb-3">
+              <label class="form-label">Número de Guía</label>
+              <select class="form-control" id="select_num_guia" name="num_guia" required></select>
+          </div>
 
           <div class="mb-3">
               <label class="form-label">Estado</label>
@@ -156,7 +161,6 @@ if (!isset($_SESSION) || $_SESSION['id'] == false) {
               <label class="form-label">Fecha Entrega</label>
               <input type="date" class="form-control" name="fecha_entrga" id="edit_fecha_entrga">
           </div>
-          <input type="hidden" name="action" value="updatePedidoEstado">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -169,15 +173,36 @@ if (!isset($_SESSION) || $_SESSION['id'] == false) {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modalEditar = document.getElementById('modalEditarEstado');
+    const selectNumGuia = modalEditar.querySelector('#select_num_guia');
+    const selectEstado = modalEditar.querySelector('#edit_estado');
+    const inputFecha = modalEditar.querySelector('#edit_fecha_entrga');
+
     modalEditar.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
-        const id = button.getAttribute('data-id');
-        const estado = button.getAttribute('data-estado');
-        const fecha = button.getAttribute('data-fecha');
 
-        modalEditar.querySelector('#edit_id_pedido').value = id;
-        modalEditar.querySelector('#edit_estado').value = estado;
-        modalEditar.querySelector('#edit_fecha_entrga').value = fecha;
+        // const idPedido = button.getAttribute('data-id'); // ya no usamos id_pedido
+        const numGuiaStr = button.getAttribute('data-num-guia') || "";
+        const estadoGeneral = button.getAttribute('data-estado');
+        const fechaGeneral = button.getAttribute('data-fecha');
+
+        selectEstado.value = estadoGeneral;
+        inputFecha.value = fechaGeneral;
+
+        selectNumGuia.innerHTML = '';
+
+        // En tu ejemplo, num_guia viene como string, si es múltiple guías separadas por coma puedes adaptar
+        const numGuias = numGuiaStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+        numGuias.forEach(numGuia => {
+            const option = document.createElement('option');
+            option.value = numGuia;
+            option.textContent = numGuia;
+            selectNumGuia.appendChild(option);
+        });
+
+        if(numGuias.length > 0){
+            selectNumGuia.selectedIndex = 0;
+        }
     });
 });
 </script>

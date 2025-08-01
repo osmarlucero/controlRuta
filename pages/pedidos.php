@@ -108,7 +108,7 @@ if (!isset($_SESSION) || $_SESSION['id'] == false) {
               <label class="form-label">Estado</label>
               <select class="form-control" name="estado" required>
                   <option value="Pendiente">Pendiente</option>
-                  <option value="Entregado">Entregado</option>
+                  <option value="Entregado">Recibido</option>
               </select>
           </div>
           <div class="mb-3">

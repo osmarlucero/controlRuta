@@ -227,7 +227,8 @@
 						    p.fecha_entrga,
 						    p.monto,
 						    GROUP_CONCAT(ng.num_guia SEPARATOR ', ') AS num_guia,
-						    GROUP_CONCAT(ng.observaciones SEPARATOR ', ') AS detalle
+						    GROUP_CONCAT(ng.estado SEPARATOR ', ') AS estado,
+						    GROUP_CONCAT(ng.observaciones SEPARATOR ', ') AS detalle,
 						    GROUP_CONCAT(ng.fecha_entrega SEPARATOR ', ') AS fecha_entrga
 						FROM pedidos p
 						LEFT JOIN numeros_guia ng ON p.id_pedidos = ng.id_pedidos

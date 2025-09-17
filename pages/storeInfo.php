@@ -104,7 +104,7 @@
             }
         }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap" ></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMjCL0xIOHXoLDH4cahfqQPUlc9dF9Z24&callback=initMap" ></script>
 </head>
 <body>
     <header id="header"></header>

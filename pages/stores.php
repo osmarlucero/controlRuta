@@ -2,6 +2,7 @@
 include "../app/categoryController.php";
 $categoryController = new categoryController();
 $users = $categoryController->getLocations();
+$locationsMap = $categoryController->getLocationsMap();
 if (isset($_SESSION) == false || $_SESSION['id'] == false) {
     header("Location:../");
 }
@@ -14,20 +15,25 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Tiendas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-        crossorigin="anonymous">
     <link rel="stylesheet" href="../CSS/colorFullUsers.css?v=0.0.2" />
-    <script src="../app/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-eESmnR9on8Kc6G5jFK7M/n6Ux1xZeF+41iQZ10W9ROx5u6IcaRRiEu6VxlUww9D"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
+      rel="stylesheet" 
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
+      crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
         crossorigin="anonymous"></script>
+    <script src="../app/jquery-3.5.1.min.js"></script>
+
     <script>
         $(function () {
             $("#header").load("menu.php");
         });
-    </script>
-    <script type="text/javascript">
+
+        var markers = []; // Guardaremos todos los marcadores aquí
+        var map; // Referencia global al mapa
+
         function remvMap() {
             var mainContainer = document.getElementById('mainContainer');
             var mapContainer = document.getElementById('map');
@@ -36,7 +42,7 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
             mapContainer.classList.remove('d-flex');
             mapContainer.classList.add('d-none');
         }
-        
+
         function remvList() {
             var mainContainer = document.getElementById('mainContainer');
             var mapContainer = document.getElementById('map');
@@ -47,7 +53,7 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
         }
 
         function initMap() {
-            var locations = <?php echo json_encode($users); ?>;
+            var locations = <?php echo json_encode($locationsMap); ?>;
             console.log(locations);
 
             for (var i = 0; i < locations.length; i++) {
@@ -56,7 +62,7 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
             }
 
             if (locations.length > 0) {
-                var map = new google.maps.Map(document.getElementById('map'), {
+                map = new google.maps.Map(document.getElementById('map'), {
                     center: locations[0],
                     zoom: 10
                 });
@@ -64,6 +70,17 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
                 for (var i = 0; i < locations.length; i++) {
                     addMarker(locations[i], map, locations[i].id_tienda);
                 }
+
+                // 👉 Agregar botón de contar tiendas visibles
+                var controlDiv = document.createElement('div');
+                var controlUI = document.createElement('button');
+                controlUI.className = "btn btn-primary m-2";
+                controlUI.innerText = "Contar tiendas visibles";
+                controlUI.addEventListener("click", function() {
+                    countVisibleStores(map);
+                });
+                controlDiv.appendChild(controlUI);
+                map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
             }
         }
 
@@ -74,6 +91,8 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
                 title: 'Ubicación'
             });
 
+            markers.push(marker); // 👉 Guardamos cada marcador en el array global
+
             var link = '<a href="storeInfo.php?id=' + id + '">Informacion de tienda</a>';
 
             var infoWindow = new google.maps.InfoWindow({
@@ -83,6 +102,20 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
             marker.addListener('click', function () {
                 infoWindow.open(map, marker);
             });
+        }
+
+        // 👉 Función que cuenta las tiendas visibles en el área del mapa
+        function countVisibleStores(map) {
+            var bounds = map.getBounds();
+            var count = 0;
+
+            markers.forEach(function(marker) {
+                if (bounds.contains(marker.getPosition())) {
+                    count++;
+                }
+            });
+
+            alert("Tiendas visibles en el área: " + count);
         }
 
         // Función para buscar en la lista
@@ -96,7 +129,7 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
             });
         }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCek2wbl-E5DjBL9AtoM2J6RL209xmGj30&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMjCL0xIOHXoLDH4cahfqQPUlc9dF9Z24&callback=initMap"></script>
 </head>
 
 <body>
@@ -104,10 +137,10 @@ if (isset($_SESSION) == false || $_SESSION['id'] == false) {
 
     <main class="container mt-5">
         <div class="mainContainer">
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Tiendas Existentes</h2>
-    <a href="main.php" class="btn btn-secondary">Regresar</a>
-</div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Tiendas Existentes</h2>
+                <a href="main.php" class="btn btn-secondary">Regresar</a>
+            </div>
             <div class="">
                 <p onclick="remvMap()" class="btn btn-success">Listado</p>
                 <p onclick="remvList()" class="btn btn-success">Mapa</p>

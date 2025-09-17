@@ -152,7 +152,37 @@
 	}
 
 	class CategoryController{
-		public function updatePedidoEstadoByNumGuia($id_guia, $estado, $fecha_entrega) {
+		public function getLocationsMap(){
+			if(true){
+	 			$conn = connect();
+	 			$id=$_SESSION['id'];
+				if ($conn->connect_error==false){
+					if($_SESSION['rol']=="Admin"){
+						$query = "SELECT * FROM tienda WHERE LNG IS NOT NULL ORDER BY id_tienda DESC";
+						$prepared_query = $conn->prepare($query);
+					}
+					else{
+						$query = "SELECT * from tienda where vendedor = (SELECT id FROM users WHERE encargado = ?)";
+						$prepared_query = $conn->prepare($query);
+						$prepared_query->bind_param('i',$id);
+					}
+					$prepared_query = $conn->prepare($query);	
+					$prepared_query->execute();
+					$results = $prepared_query->get_result();
+					$stores = $results->fetch_all(MYSQLI_ASSOC);
+					if( count($stores)>0){
+						return $stores;
+					}else{
+						return array();				
+					}
+				}else{
+					echo "error";
+				}
+			}else
+				return array();
+		}
+		
+	public function updatePedidoEstadoByNumGuia($id_guia, $estado, $fecha_entrega) {
 		    $conn = connect();
 		    if ($conn->connect_error == false) {
 		        $query = "UPDATE numeros_guia 
@@ -173,7 +203,6 @@
 		        header("Location:" . $_SERVER["HTTP_REFERER"]);
 		    }
 		}
-
 
 		public function uploadPedido($detallesArray, $proveedor, $guiasArray, $estado, $fecha_pedido, $fecha_entrga, $monto) {
 		    $conn = connect();

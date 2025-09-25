@@ -4,6 +4,8 @@
     $users = $categoryController->getStoresInfo($_GET['id']);
     $sells = $categoryController->getStockPieces($_GET['id']);
     $subUs = $categoryController->getUsersControl($_SESSION['id']);
+    $historyControl = $categoryController->getVisitHistory($_GET['id']);
+    echo json_encode($historyControl);
     if(isset($_SESSION)==false  || $_SESSION['id']==false){
         header("Location:../");
     }
@@ -132,7 +134,31 @@
                         <tr><th>Teléfono</th><td><input type="text" name="telefono" value="<?= $user['telefono'] ?>"></td></tr>
                         <tr><th>Fecha Creación</th><td><input type="date" name="fecha_creacion" value="<?= $user['fecha_creacion'] ?>"></td></tr>
                         <tr><th>Fecha Última Visita</th><td><?= $user['fecha_ultima_visita'] ?></td></tr>
+<tr>
+    <th>Historial de Visitas</th>
+    <td>
+        <?php if (!empty($historyControl)) : ?>
+            <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width:100%; text-align:center;">
+                <thead style="background-color:#f2f2f2;">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($historyControl as $visit) : ?>
                         <tr>
+                            <td><?= htmlspecialchars($visit['fecha']) ?></td>
+                            <td><?= ucfirst(htmlspecialchars($visit['tipo'])) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else : ?>
+            <em>No hay visitas registradas</em>
+        <?php endif; ?>
+    </td>
+</tr>                        <tr>
     <th>Vendedor</th>
     <td>
         <select name="vendedor">

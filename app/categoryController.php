@@ -152,6 +152,34 @@
 	}
 
 	class CategoryController{
+		public function getVisitHistory($id) {
+		    $conn = connect();
+		    if ($conn->connect_error == false) {        
+		        $query = "SELECT * FROM `historial_visitas` WHERE id_tienda = ? ORDER BY `id` ASC";
+		        $prepared_query = $conn->prepare($query);
+
+		        if ($prepared_query) {
+		            $prepared_query->bind_param("i", $id); // "i" porque es entero
+		            $prepared_query->execute();
+		            $results = $prepared_query->get_result();
+		            $stores = $results->fetch_all(MYSQLI_ASSOC);
+
+		            $prepared_query->close();
+		            $conn->close();
+
+		            if (count($stores) > 0) {
+		                return $stores;
+		            } else {
+		                return array();
+		            }
+		        } else {
+		            return array("error" => "Error en la preparación de la consulta");
+		        }
+		    } else {
+		        return array("error" => "Error en la conexión a la base de datos");
+		    }
+		}
+
 		public function getLocationsMap(){
 			if(true){
 	 			$conn = connect();
